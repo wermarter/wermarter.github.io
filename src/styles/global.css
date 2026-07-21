@@ -162,6 +162,9 @@ img, svg { display: block; max-width: 100%; }
 .blog-card h2 a { text-decoration: none; }
 .blog-card p { max-width: 680px; margin: .5rem 0 0; color: var(--ink-soft); }
 .blog-card > span { color: var(--leaf); font: 1.5rem var(--hand); white-space: nowrap; }
+.empty-note { max-width: 680px; padding: 2.5rem; border: 1px dashed var(--line); border-radius: 10px 4px 13px 5px; background: var(--paper-raised); }
+.empty-note h2 { margin: .2rem 0 .6rem; font: 600 clamp(2rem, 4vw, 3.2rem) var(--display); }
+.empty-note p:last-child { margin-bottom: 0; color: var(--ink-soft); }
 
 .blog-post { max-width: 900px; margin: 0 auto; padding: clamp(4rem, 8vw, 8rem) clamp(1.25rem, 5vw, 4rem); }
 .blog-post__header { padding-bottom: 2.5rem; border-bottom: 1px solid var(--line); }

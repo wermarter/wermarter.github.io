@@ -8,9 +8,16 @@ const date = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
 <BaseLayout title="Notes" description="Occasional notes on backend engineering, distributed systems, observability, and learning by building.">
   <header class="page-intro"><p class="eyebrow">The field notebook</p><h1>Notes from the work.</h1><p class="lede">Occasional writing about systems, operations, architecture, and whatever I am learning by building.</p></header>
   <section class="content-section">
-    <div class="blog-list">
-      {posts.map((post) => <article class="blog-card"><time datetime={post.data.publishedAt.toISOString()}>{date.format(post.data.publishedAt)}</time><div><h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2><p>{post.data.description}</p><div class="tag-list">{post.data.tags.map((tag) => <span>{tag}</span>)}</div></div><span>open note →</span></article>)}
-    </div>
+    {posts.length > 0 ? (
+      <div class="blog-list">
+        {posts.map((post) => <article class="blog-card"><time datetime={post.data.publishedAt.toISOString()}>{date.format(post.data.publishedAt)}</time><div><h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2><p>{post.data.description}</p><div class="tag-list">{post.data.tags.map((tag) => <span>{tag}</span>)}</div></div><span>open note →</span></article>)}
+      </div>
+    ) : (
+      <div class="empty-note">
+        <p class="hand-note">A clean first page.</p>
+        <h2>No published notes yet.</h2>
+        <p>New writing about systems, operations, and architecture will appear here.</p>
+      </div>
+    )}
   </section>
 </BaseLayout>
-
