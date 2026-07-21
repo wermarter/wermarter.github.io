@@ -28,8 +28,7 @@ export const profile = {
   summary:
     "Software engineer with four years of backend experience, a practical frontend foundation, and a strong interest in distributed systems, observability, and maintainable architecture.",
   location: "District 7, Ho Chi Minh City, Vietnam",
-  birthDate: "2000-01-09",
-  phone: "+84 772 440 901",
+  birthYear: 2000,
   email: "wermarter@gmail.com",
   links: {
     github: "https://github.com/wermarter",

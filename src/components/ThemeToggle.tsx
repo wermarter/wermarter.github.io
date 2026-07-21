@@ -16,9 +16,17 @@ export default function ThemeToggle() {
 
   function toggleTheme() {
     const next = theme === "light" ? "dark" : "light";
-    document.documentElement.dataset.theme = next;
-    window.localStorage.setItem("theme", next);
-    setTheme(next);
+    const applyTheme = () => {
+      document.documentElement.dataset.theme = next;
+      window.localStorage.setItem("theme", next);
+      setTheme(next);
+    };
+
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && "startViewTransition" in document) {
+      document.startViewTransition(applyTheme);
+    } else {
+      applyTheme();
+    }
   }
 
   return (
@@ -28,4 +36,3 @@ export default function ThemeToggle() {
     </button>
   );
 }
-
