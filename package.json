@@ -7,8 +7,7 @@
     "dev": "astro dev",
     "build": "npm run check && astro build",
     "preview": "astro preview",
-    "check": "astro sync && tsc --noEmit",
-    "test": "vitest run"
+    "check": "astro sync && tsc --noEmit"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.3",
@@ -24,8 +23,7 @@
   "devDependencies": {
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "typescript": "^7.0.2",
-    "vitest": "latest"
+    "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=24.0.0"
