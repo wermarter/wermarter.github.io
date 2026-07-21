@@ -12,7 +12,7 @@ const { project } = Astro.props;
     {project.achievements.slice(0, 3).map((achievement) => <li>{achievement}</li>)}
   </ul>
   <div class="tag-list" aria-label="Technologies">
-    {project.technologies.map((technology) => <span>{technology}</span>)}
+    {project.technologies.slice(0, 8).map((technology) => <span>{technology}</span>)}
+    {project.technologies.length > 8 && <span>+{project.technologies.length - 8} more</span>}
   </div>
 </article>
-

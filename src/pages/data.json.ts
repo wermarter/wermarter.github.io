@@ -5,11 +5,11 @@ import { publicProfileData } from "../data/personal";
 export const prerender = true;
 
 export const GET: APIRoute = async () => {
-  const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  const posts = (await getCollection("blog"))
     .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
     .map((post) => ({
       id: post.id,
-      url: `/blog/${post.id}/`,
+      url: post.data.draft ? null : `/blog/${post.id}/`,
       ...post.data,
       publishedAt: post.data.publishedAt.toISOString(),
       updatedAt: post.data.updatedAt?.toISOString() ?? null,
@@ -24,4 +24,3 @@ export const GET: APIRoute = async () => {
     },
   });
 };
-

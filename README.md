@@ -20,7 +20,7 @@ npm run build
 
 Professional experience, projects, education, skills, certificates, and contact details live in `src/data/personal.ts`. The same source powers the pages and the public machine-readable endpoint at [`/data.json`](https://haminhchien.me/data.json).
 
-The JSON response allows cross-origin reads and includes the raw Markdown or MDX body for every published post. Draft posts are intentionally excluded.
+The JSON response allows cross-origin reads and includes the raw Markdown or MDX body for every post, including drafts. Draft entries have `draft: true` and a `null` public URL; they are excluded from the rendered blog until published.
 
 ## Publish a note
 
@@ -43,4 +43,3 @@ Use Markdown by default. Choose MDX only when the note needs an embedded compone
 GitHub Actions checks every push and pull request. Pushes to `main` also build and deploy the static site to GitHub Pages through Astro's official action.
 
 The existing custom domain is preserved through `public/CNAME`; the GitHub Pages fallback remains `https://wermarter.github.io`.
-
