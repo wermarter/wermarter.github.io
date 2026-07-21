@@ -1,0 +1,7 @@
+# Hà Minh Chiến
+
+> Personal portfolio and writing garden for Hà Minh Chiến, a software engineer.
+
+## Machine-readable data
+
+- [Portfolio data](https://wermarter.github.io/data.json): Canonical JSON containing the public profile, experience, projects, education, certificates, skills, contact details, and blog posts.
