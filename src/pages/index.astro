@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BotanicalSketch from "../components/BotanicalSketch.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { coreSkills, experience, featuredProjects, profile } from "../data/personal";
+const recentRoles = experience.slice(0, 3);
+const homeProjects = featuredProjects.slice(0, 4);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="hero__copy">
+      <p class="eyebrow">Backend engineer · system gardener</p>
+      <h1>Building systems that can <em>grow.</em></h1>
+      <p class="lede">{profile.tagline} I work across backend engineering, infrastructure, and the occasional interface that ties it all together.</p>
+      <div class="hero__actions">
+        <a class="button" href="/projects/">See what I’ve built</a>
+        <a class="button button--quiet" href={`mailto:${profile.email}`}>Write to me</a>
+      </div>
+    </div>
+    <div class="hero__portrait">
+      <img src="/profile.jpg" width="625" height="624" alt={`Portrait of ${profile.name}`} />
+    </div>
+    <BotanicalSketch class="hero__plant" />
+  </section>
+
+  <section class="content-section" aria-labelledby="about-title">
+    <div class="section-heading">
+      <div><p class="eyebrow">A short introduction</p><h2 id="about-title">Hello, I’m Chiến.</h2></div>
+      <div><p>{profile.summary}</p><p class="hand-note">Clear systems. Calm operations. Useful software.</p></div>
+    </div>
+    <div class="skills-strip">
+      {coreSkills.map((skill) => <div class="skill"><strong>{skill.name}</strong><span>{skill.years} {skill.years === 1 ? "year" : "years"} of practice</span></div>)}
+    </div>
+  </section>
+
+  <section class="content-section" aria-labelledby="experience-title">
+    <div class="section-heading">
+      <div><p class="eyebrow">Where I’ve worked</p><h2 id="experience-title">Experience</h2></div>
+      <p>From solo delivery on an on-premise laboratory platform to distributed systems operated across international teams.</p>
+    </div>
+    <div class="experience-preview">
+      {recentRoles.map((role) => (
+        <article class="experience-row">
+          <time>{role.start.replace("-", ".")} — {role.end?.replace("-", ".") ?? "now"}</time>
+          <div><h3>{role.title}</h3><p>{role.company}</p></div>
+          <a href="/experience/">read the work →</a>
+        </article>
+      ))}
+    </div>
+    <p><a class="button button--quiet" href="/experience/">Full experience</a></p>
+  </section>
+
+  <section class="content-section" aria-labelledby="projects-title">
+    <div class="section-heading">
+      <div><p class="eyebrow">Selected work</p><h2 id="projects-title">Projects</h2></div>
+      <p>A few systems where reliability, observability, or careful architecture made a measurable difference.</p>
+    </div>
+    <div class="project-grid">{homeProjects.map((project) => <ProjectCard project={project} />)}</div>
+  </section>
+
+  <section class="contact-note">
+    <div><p class="eyebrow">Let’s compare notes</p><h2>Have a difficult system problem?</h2><p>I enjoy backend architecture, distributed workflows, platform reliability, and code that leaves the next person with fewer surprises.</p></div>
+    <a class="hand-note" href={`mailto:${profile.email}`}>say hello ↗</a>
+  </section>
+</BaseLayout>

@@ -1,41 +1,46 @@
-# Website
+# Hà Minh Chiến — personal website
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+A static portfolio and writing garden built with Astro 7, TypeScript 7, and small React islands.
 
-### Installation
+## Local development
 
-```
-$ yarn
-```
-
-### Local Development
-
-```
-$ yarn start
+```bash
+npm install
+npm run dev
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+Run the full local checks with:
 
-### Build
-
-```
-$ yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-### Deployment
-
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
+```bash
+npm test
+npm run build
 ```
 
-Not using SSH:
+## Edit portfolio data
 
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
+Professional experience, projects, education, skills, certificates, and contact details live in `src/data/personal.ts`. The same source powers the pages and the public machine-readable endpoint at [`/data.json`](https://haminhchien.me/data.json).
+
+The JSON response allows cross-origin reads and includes the raw Markdown or MDX body for every published post. Draft posts are intentionally excluded.
+
+## Publish a note
+
+Add an `.md` or `.mdx` file under `src/content/blog` with this frontmatter:
+
+```yaml
+---
+title: "A clear title"
+description: "One sentence that says what the note is about."
+publishedAt: 2026-07-21
+tags: [backend, observability]
+draft: false
+---
 ```
 
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+Use Markdown by default. Choose MDX only when the note needs an embedded component. Set `draft: true` to keep a note out of the site and JSON export.
+
+## Deployment
+
+GitHub Actions checks every push and pull request. Pushes to `main` also build and deploy the static site to GitHub Pages through Astro's official action.
+
+The existing custom domain is preserved through `public/CNAME`; the GitHub Pages fallback remains `https://wermarter.github.io`.
+

@@ -1,0 +1,23 @@
+---
+import ThemeToggle from "./ThemeToggle";
+import { profile } from "../data/personal";
+const path = Astro.url.pathname;
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/experience/", label: "Experience" },
+  { href: "/projects/", label: "Projects" },
+  { href: "/blog/", label: "Notes" },
+];
+---
+
+<header class="site-header">
+  <a class="wordmark" href="/" aria-label={`${profile.name}, home`}>
+    <span aria-hidden="true">wm</span>
+    <span>{profile.name}</span>
+  </a>
+  <nav aria-label="Main navigation">
+    {links.map((link) => <a href={link.href} aria-current={path === link.href || (link.href !== "/" && path.startsWith(link.href)) ? "page" : undefined}>{link.label}</a>)}
+  </nav>
+  <ThemeToggle client:load />
+</header>
+

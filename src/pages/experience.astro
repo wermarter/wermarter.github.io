@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { certifications, education, experience } from "../data/personal";
+const format = (value: string | null) => value ? new Intl.DateTimeFormat("en", { month: "short", year: "numeric" }).format(new Date(`${value}-01T00:00:00Z`)) : "Present";
+---
+
+<BaseLayout title="Experience" description="The working history of Hà Minh Chiến, backend engineer.">
+  <header class="page-intro"><p class="eyebrow">The path so far</p><h1>Work, in context.</h1><p class="lede">What I worked on, what changed, and the tools that helped. Project names are kept as they appear in my CV.</p></header>
+  <section class="content-section">
+    <div class="timeline">
+      {experience.map((role) => (
+        <article class="role">
+          <div class="role__meta"><time>{format(role.start)}</time> — <time>{format(role.end)}</time></div>
+          <h2>{role.title} <span>at {role.company}</span></h2>
+          {role.summary.map((paragraph) => <p>{paragraph}</p>)}
+          {role.projects.length > 0 && <div class="project-grid">{role.projects.map((project) => <ProjectCard project={project} />)}</div>}
+        </article>
+      ))}
+    </div>
+  </section>
+  <section class="content-section">
+    <div class="section-heading"><div><p class="eyebrow">Foundations</p><h2>Education & language</h2></div><div><p><strong>{education[0].institution}</strong><br />{education[0].program}, {education[0].score}<br />{format(education[0].start)} — {format(education[0].end)}</p>{certifications.map((certificate) => <p><strong>{certificate.name} {certificate.score}</strong><br />{certificate.issuer}, {format(certificate.issued)}</p>)}</div></div>
+  </section>
+</BaseLayout>
+

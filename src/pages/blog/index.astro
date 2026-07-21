@@ -1,0 +1,16 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const date = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
+---
+
+<BaseLayout title="Notes" description="Occasional notes on backend engineering, distributed systems, observability, and learning by building.">
+  <header class="page-intro"><p class="eyebrow">The field notebook</p><h1>Notes from the work.</h1><p class="lede">Occasional writing about systems, operations, architecture, and whatever I am learning by building.</p></header>
+  <section class="content-section">
+    <div class="blog-list">
+      {posts.map((post) => <article class="blog-card"><time datetime={post.data.publishedAt.toISOString()}>{date.format(post.data.publishedAt)}</time><div><h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2><p>{post.data.description}</p><div class="tag-list">{post.data.tags.map((tag) => <span>{tag}</span>)}</div></div><span>open note →</span></article>)}
+    </div>
+  </section>
+</BaseLayout>
+

@@ -1,7 +1,9 @@
 {
-  // This file is not used in compilation. It is here just for a nice editor experience.
-  "extends": "@tsconfig/docusaurus/tsconfig.json",
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", "tmp"],
   "compilerOptions": {
-    "baseUrl": "."
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   }
 }

@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { allProjects } from "../data/personal";
+---
+
+<BaseLayout title="Projects" description="Selected backend, infrastructure, observability, and full-stack projects by Hà Minh Chiến.">
+  <header class="page-intro"><p class="eyebrow">Things I have grown</p><h1>Selected projects.</h1><p class="lede">A working notebook of platforms, migrations, optimizations, and infrastructure. Some client names stay private; the engineering lessons do not.</p></header>
+  <section class="content-section"><div class="project-grid">{allProjects.map((project) => <ProjectCard project={project} />)}</div></section>
+</BaseLayout>
+

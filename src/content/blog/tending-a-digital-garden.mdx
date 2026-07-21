@@ -1,0 +1,21 @@
+---
+title: "Tending a digital garden"
+description: "Why this portfolio is designed as a place for ideas to grow, not a frozen résumé."
+publishedAt: 2026-07-21
+tags: [personal, astro, mdx]
+---
+
+import SeedCounter from "../../components/SeedCounter";
+
+A résumé is a snapshot. A website can be a working notebook.
+
+I built this one around that distinction. The experience and project data stays structured, so it can become a CV, a JSON document, or a new presentation later. The writing stays in Markdown so it remains easy to own and move.
+
+## Static by default
+
+Most of this page is plain HTML. JavaScript appears only where it adds something useful. This small button is one of those deliberately isolated pieces:
+
+<SeedCounter client:visible />
+
+The same principle works well in backend systems: keep the simple path simple, and spend complexity only where the behavior genuinely needs it.
+

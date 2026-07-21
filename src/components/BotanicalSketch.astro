@@ -1,0 +1,20 @@
+---
+interface Props { class?: string; label?: string; }
+const { class: className = "", label = "" } = Astro.props;
+---
+
+<svg class:list={["botanical-sketch", className]} viewBox="0 0 320 280" role={label ? "img" : "presentation"} aria-label={label || undefined} aria-hidden={label ? undefined : "true"}>
+  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path class="stem" d="M156 270c4-54-8-104 9-151 11-31 36-58 62-80" />
+    <path class="echo" d="M160 270c2-53-5-100 11-148 11-30 34-57 59-78" />
+    <path d="M170 120c-35-2-62-20-73-49 36-1 62 18 73 49Z" />
+    <path d="M188 84c4-31 22-55 50-67 2 32-18 57-50 67Z" />
+    <path d="M157 166c-31 3-56-9-72-35 31-4 57 8 72 35Z" />
+    <path d="M172 137c26-7 49 1 66 23-27 8-50 0-66-23Z" />
+    <path d="M156 211c-28 6-51-2-68-23 28-7 52 1 68 23Z" />
+    <path d="M155 237c19-8 37-5 52 10-20 9-38 5-52-10Z" />
+    <path d="M123 99c13-2 28 5 41 20M214 52c-9 7-18 18-25 32M107 143c17 2 34 10 49 23M218 153c-14-4-30-2-46 8" opacity=".6" />
+    <path class="pot" d="M114 249h91l-10 27h-70l-11-27Z" />
+  </g>
+</svg>
+
