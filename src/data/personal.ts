@@ -1,3 +1,5 @@
+import { countSkillUsage, selectCoreSkills, Skill, sortSkillsByRarity } from "./skills";
+
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 export interface CalendarPeriod {
@@ -13,7 +15,7 @@ export interface Project extends CalendarPeriod {
   description: string;
   role: string;
   achievements: string[];
-  technologies: string[];
+  technologies: Skill[];
   team?: string;
   url?: string;
   featured?: boolean;
@@ -52,14 +54,7 @@ export const education = [
   },
 ] as const;
 
-export const coreSkills = [
-  { name: "Node.js", years: 4 },
-  { name: "AWS", years: 3 },
-  { name: "Kubernetes", years: 2 },
-  { name: "React", years: 1 },
-] as const;
-
-export const experience: Experience[] = [
+const experienceData: Experience[] = [
   {
     company: "GBG Group Services",
     title: "Senior Backend Developer",
@@ -85,7 +80,7 @@ export const experience: Experience[] = [
           "Refactored and tuned SQL queries with targeted index hints.",
           "Reduced a stream processing workload from 1 GB to 200 MB using AsyncGenerator.",
         ],
-        technologies: ["NestJS", "CQRS", "GraphQL", "MySQL"],
+        technologies: [Skill.NestJS, Skill.CQRS, Skill.GraphQL, Skill.MySQL],
         team: "16 people: 10 backend, 5 frontend, 1 QA",
         url: "https://www.footballticketnet.com",
       },
@@ -104,7 +99,7 @@ export const experience: Experience[] = [
           "Integrated MaxMind minFraud and introduced stale-while-revalidate caching.",
           "Delivered B2B integrations with partner teams in Spain, the US, and Israel.",
         ],
-        technologies: ["Serverless", "AWS Lambda", "Fastify", "MySQL", "Redis", "SQS"],
+        technologies: [Skill.Serverless, Skill.AWSLambda, Skill.Fastify, Skill.MySQL, Skill.Redis, Skill.SQS],
         team: "Around 20 people across several countries",
         url: "https://www.gigsberg.com",
         featured: true,
@@ -138,7 +133,7 @@ export const experience: Experience[] = [
           "Correlated logs, traces, and metrics with OpenTelemetry, Loki, Tempo, and Prometheus.",
           "Maintained crawlers for more than 20 sites.",
         ],
-        technologies: ["NestJS", "Kubernetes", "Redis", "RabbitMQ", "Grafana"],
+        technologies: [Skill.NestJS, Skill.Kubernetes, Skill.Redis, Skill.RabbitMQ, Skill.Grafana],
         team: "8 people, autoscaling to a minimum of 1",
         featured: true,
       },
@@ -156,7 +151,7 @@ export const experience: Experience[] = [
           "Reviewed backend work and collaborated on schema design and migrations.",
           "Analyzed frontend issues and coordinated backend tasks.",
         ],
-        technologies: ["NestJS", "Kafka Streams", "MySQL", "OpenSearch", "CloudFront", "React", "Electron"],
+        technologies: [Skill.NestJS, Skill.KafkaStreams, Skill.MySQL, Skill.OpenSearch, Skill.CloudFront, Skill.React, Skill.Electron],
         team: "8 people: 3 frontend, 3 backend, 2 Electron",
       },
     ],
@@ -190,7 +185,7 @@ export const experience: Experience[] = [
           "Built an ingestion pipeline with Snowflake and MySQL stored procedures.",
           "Built a Redis queue with at-least-once delivery from scratch.",
         ],
-        technologies: ["Node.js", "Redis", "InfluxDB", "Grafana", "MySQL", "ECS Fargate", "CloudWatch", "Snowflake"],
+        technologies: [Skill.NodeJS, Skill.Redis, Skill.InfluxDB, Skill.Grafana, Skill.MySQL, Skill.ECSFargate, Skill.CloudWatch, Skill.Snowflake],
         team: "5 people, including 2 overseas teammates",
         featured: true,
       },
@@ -208,7 +203,7 @@ export const experience: Experience[] = [
           "Integrated proprietary OAuth 2.0 authorization code SSO.",
           "Created a containerized local workflow with Docker Compose.",
         ],
-        technologies: ["AWS EC2", "Python", "NestJS", "MongoDB", "RabbitMQ", "Redis"],
+        technologies: [Skill.AWSEC2, Skill.Python, Skill.NestJS, Skill.MongoDB, Skill.RabbitMQ, Skill.Redis],
         team: "4 people",
       },
     ],
@@ -240,32 +235,32 @@ export const experience: Experience[] = [
           "Automated on-premise delivery with GitHub Actions, Kubernetes, Helm, Ansible, Argo CD, Envoy Gateway, Longhorn, MinIO, and observability tooling.",
         ],
         technologies: [
-          "React",
-          "Redux Toolkit Query",
-          "MUI",
-          "React Router",
-          "Suspense",
-          "CASL",
-          "React Hook Form",
-          "Zod",
-          "NestJS",
-          "Redis",
-          "MongoDB",
-          "gRPC",
-          "RxJS",
-          "Clean Architecture",
-          "Puppeteer",
-          "EJS",
-          "ABAC",
-          "OpenAPI",
-          "GitHub Actions",
-          "Kubernetes",
-          "Helm",
-          "Ansible",
-          "Argo CD",
-          "Envoy Gateway",
-          "Longhorn",
-          "MinIO",
+          Skill.React,
+          Skill.ReduxToolkitQuery,
+          Skill.MUI,
+          Skill.ReactRouter,
+          Skill.Suspense,
+          Skill.CASL,
+          Skill.ReactHookForm,
+          Skill.Zod,
+          Skill.NestJS,
+          Skill.Redis,
+          Skill.MongoDB,
+          Skill.GRPC,
+          Skill.RxJS,
+          Skill.CleanArchitecture,
+          Skill.Puppeteer,
+          Skill.EJS,
+          Skill.ABAC,
+          Skill.OpenAPI,
+          Skill.GitHubActions,
+          Skill.Kubernetes,
+          Skill.Helm,
+          Skill.Ansible,
+          Skill.ArgoCD,
+          Skill.EnvoyGateway,
+          Skill.Longhorn,
+          Skill.MinIO,
         ],
         team: "Solo project",
         url: "https://github.com/wermarter/diut",
@@ -285,7 +280,7 @@ export const experience: Experience[] = [
   },
 ];
 
-export const personalProjects: Project[] = [
+const personalProjectData: Project[] = [
   {
     id: "homelab",
     name: "Homelab",
@@ -300,7 +295,7 @@ export const personalProjects: Project[] = [
       "Configured Cloudflare dynamic DNS and remote VS Code tunneling.",
       "Use the lab as a safe place to learn infrastructure by operating it.",
     ],
-    technologies: ["Proxmox", "Ansible", "K3s", "Cloudflare"],
+    technologies: [Skill.Proxmox, Skill.Ansible, Skill.K3s, Skill.Cloudflare],
     url: "https://github.com/wermarter/homelab",
     featured: true,
   },
@@ -311,7 +306,20 @@ export const certifications = [
   { name: "IELTS", score: "7.5/9.0", issuer: "IDP Education Ltd", issued: "2017-07" },
 ] as const;
 
+const sourceProjects = [...personalProjectData, ...experienceData.flatMap((item) => item.projects)];
+const skillUsage = countSkillUsage(sourceProjects);
+const orderProjectSkills = (project: Project): Project => ({
+  ...project,
+  technologies: sortSkillsByRarity(project.technologies, skillUsage),
+});
+
+export const experience: Experience[] = experienceData.map((item) => ({
+  ...item,
+  projects: item.projects.map(orderProjectSkills),
+}));
+export const personalProjects: Project[] = personalProjectData.map(orderProjectSkills);
 export const allProjects = [...personalProjects, ...experience.flatMap((item) => item.projects)];
+export const coreSkills = selectCoreSkills(skillUsage, 3);
 export const featuredProjects = allProjects.filter((project) => project.featured);
 
 export const publicProfileData = {

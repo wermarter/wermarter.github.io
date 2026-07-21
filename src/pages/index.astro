@@ -28,7 +28,7 @@ const homeProjects = featuredProjects.slice(0, 4);
       <div><p>{profile.summary}</p><p class="hand-note">Clear systems. Calm operations. Useful software.</p></div>
     </div>
     <div class="skills-strip">
-      {coreSkills.map((skill) => <div class="skill"><strong>{skill.name}</strong><span>{skill.years} {skill.years === 1 ? "year" : "years"} of practice</span></div>)}
+      {coreSkills.map((skill) => <a class="skill" href={`/projects/?skill=${encodeURIComponent(skill.name)}`}><strong>{skill.name}</strong><span>Explore {skill.projectCount} related projects →</span></a>)}
     </div>
   </section>
 

@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { allProjects } from "../data/personal";
+import ReferenceTag from "./ReferenceTag.astro";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const date = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
+const projectReferences = post.data.tags.filter((tag) => tag.type === "project").map((tag) => tag.value);
+const directSkills = post.data.tags.filter((tag) => tag.type === "skill").map((tag) => tag.value);
+const projectSkills = allProjects
+  .filter((project) => projectReferences.includes(project.id))
+  .flatMap((project) => project.technologies);
+const relatedSkills = [...new Set([...directSkills, ...projectSkills])];
+const topics = post.data.tags.filter((tag) => tag.type === "topic").map((tag) => tag.value);
+---
+
+<article
+  class="blog-card"
+  data-reference-item="post"
+  data-skills={JSON.stringify(relatedSkills)}
+  data-projects={JSON.stringify(projectReferences)}
+  data-topics={JSON.stringify(topics)}
+>
+  <time datetime={post.data.publishedAt.toISOString()}>{date.format(post.data.publishedAt)}</time>
+  <div>
+    <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
+    <p>{post.data.description}</p>
+    <div class="tag-list tag-list--references">{post.data.tags.map((tag) => <ReferenceTag reference={tag} />)}</div>
+  </div>
+  <span>open note →</span>
+</article>

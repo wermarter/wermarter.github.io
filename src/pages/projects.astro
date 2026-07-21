@@ -1,11 +1,158 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import BlogCard from "../components/BlogCard.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { allProjects } from "../data/personal";
+import { Skill } from "../data/skills";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (left, right) => right.data.publishedAt.valueOf() - left.data.publishedAt.valueOf(),
+);
+const postSkills = new Set(posts.flatMap((post) => post.data.tags.filter((tag) => tag.type === "skill").map((tag) => tag.value)));
+const skills = Object.values(Skill).filter(
+  (skill) => postSkills.has(skill) || allProjects.some((project) => project.technologies.includes(skill)),
+);
+const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) => tag.type === "topic").map((tag) => tag.value)))].sort();
 ---
 
-<BaseLayout title="Projects" description="Selected backend, infrastructure, observability, and full-stack projects by Hà Minh Chiến.">
-  <header class="page-intro"><p class="eyebrow">Things I have grown</p><h1>Selected projects.</h1><p class="lede">A working notebook of platforms, migrations, optimizations, and infrastructure. Some client names stay private; the engineering lessons do not.</p></header>
-  <section class="content-section"><div class="project-grid">{allProjects.map((project) => <ProjectCard project={project} />)}</div></section>
-</BaseLayout>
+<BaseLayout title="Projects" description="Trace the skills behind Hà Minh Chiến’s projects and field notes.">
+  <header class="page-intro reference-page-intro">
+    <p class="eyebrow">A connected work index</p>
+    <h1>Trace skill to evidence.</h1>
+    <p class="lede">Choose a skill, project, or topic to find the systems where it was used and the notes that explain the thinking behind it.</p>
+  </header>
 
+  <section class="content-section reference-browser" data-reference-browser>
+    <form class="reference-filter" aria-label="Filter projects and notes">
+      <label>
+        <span>Skill</span>
+        <select name="skill" data-reference-select="skill">
+          <option value="">All skills</option>
+          {skills.map((skill) => <option value={skill}>{skill}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Project</span>
+        <select name="project" data-reference-select="project">
+          <option value="">All projects</option>
+          {allProjects.map((project) => <option value={project.id}>{project.name}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Topic</span>
+        <select name="topic" data-reference-select="topic" disabled={topics.length === 0}>
+          <option value="">{topics.length === 0 ? "No published topics" : "All topics"}</option>
+          {topics.map((topic) => <option value={topic}>{topic}</option>)}
+        </select>
+      </label>
+      <a class="reference-filter__clear" href="/projects/" data-clear-reference>Clear filter</a>
+    </form>
+
+    <p class="reference-summary" aria-live="polite" data-reference-summary>Showing all work.</p>
+
+    <section class="reference-results" aria-labelledby="project-results-title">
+      <div class="reference-results__heading">
+        <p class="eyebrow">Built evidence</p>
+        <h2 id="project-results-title">Projects <span data-result-count="project">{allProjects.length}</span></h2>
+      </div>
+      <div class="project-grid" data-result-list="project">{allProjects.map((project) => <ProjectCard project={project} />)}</div>
+      <p class="filter-empty" data-result-empty="project" hidden>No projects match this reference.</p>
+    </section>
+
+    <section class="reference-results" aria-labelledby="post-results-title">
+      <div class="reference-results__heading">
+        <p class="eyebrow">Written context</p>
+        <h2 id="post-results-title">Field notes <span data-result-count="post">{posts.length}</span></h2>
+      </div>
+      <div class="blog-list" data-result-list="post">{posts.map((post) => <BlogCard post={post} />)}</div>
+      <p class="filter-empty" data-result-empty="post" hidden={posts.length > 0}>No published notes reference this filter yet.</p>
+    </section>
+  </section>
+
+  <script>
+    const browser = document.querySelector<HTMLElement>("[data-reference-browser]");
+
+    if (browser) {
+      const kinds = ["skill", "project", "topic"] as const;
+      type ReferenceKind = (typeof kinds)[number];
+      const selects = new Map(
+        kinds.map((kind) => [kind, browser.querySelector<HTMLSelectElement>(`[data-reference-select="${kind}"]`)]),
+      );
+      const summary = browser.querySelector<HTMLElement>("[data-reference-summary]");
+
+      const getActiveReference = () => {
+        const params = new URLSearchParams(window.location.search);
+        for (const kind of kinds) {
+          const value = params.get(kind);
+          const select = selects.get(kind);
+          if (value && select && [...select.options].some((option) => option.value === value)) return { kind, value };
+        }
+        return null;
+      };
+
+      const applyReference = (reference: { kind: ReferenceKind; value: string } | null) => {
+        const counts = { project: 0, post: 0 };
+
+        for (const kind of kinds) {
+          const select = selects.get(kind);
+          if (select) select.value = reference?.kind === kind ? reference.value : "";
+        }
+
+        browser.querySelectorAll<HTMLAnchorElement>("[data-reference-link]").forEach((link) => {
+          const url = new URL(link.href);
+          const active = Boolean(reference && url.searchParams.get(reference.kind) === reference.value);
+          if (active) link.setAttribute("aria-current", "true");
+          else link.removeAttribute("aria-current");
+        });
+
+        browser.querySelectorAll<HTMLElement>("[data-reference-item]").forEach((item) => {
+          const itemKind = item.dataset.referenceItem as "project" | "post";
+          const values = reference ? JSON.parse(item.dataset[`${reference.kind}s`] ?? "[]") as string[] : [];
+          const visible = !reference || values.includes(reference.value);
+          item.hidden = !visible;
+          if (visible) counts[itemKind] += 1;
+        });
+
+        (["project", "post"] as const).forEach((kind) => {
+          const count = browser.querySelector<HTMLElement>(`[data-result-count="${kind}"]`);
+          const empty = browser.querySelector<HTMLElement>(`[data-result-empty="${kind}"]`);
+          if (count) count.textContent = String(counts[kind]);
+          if (empty) empty.hidden = counts[kind] > 0;
+        });
+
+        if (summary) {
+          const activeSelect = reference ? selects.get(reference.kind) : null;
+          const referenceLabel = activeSelect?.selectedOptions[0]?.textContent ?? reference?.value;
+          summary.textContent = reference
+            ? `Showing ${counts.project} ${counts.project === 1 ? "project" : "projects"} and ${counts.post} ${counts.post === 1 ? "note" : "notes"} for ${referenceLabel}.`
+            : `Showing all ${counts.project} projects and ${counts.post} published notes.`;
+        }
+      };
+
+      const setReference = (reference: { kind: ReferenceKind; value: string } | null) => {
+        const url = new URL(window.location.href);
+        kinds.forEach((kind) => url.searchParams.delete(kind));
+        if (reference) url.searchParams.set(reference.kind, reference.value);
+        window.history.pushState({}, "", url);
+        applyReference(reference);
+      };
+
+      selects.forEach((select, kind) => {
+        select?.addEventListener("change", () => setReference(select.value ? { kind, value: select.value } : null));
+      });
+
+      browser.addEventListener("click", (event) => {
+        const link = (event.target as Element).closest<HTMLAnchorElement>("[data-reference-link], [data-clear-reference]");
+        if (!link || new URL(link.href).pathname !== window.location.pathname) return;
+        event.preventDefault();
+        const url = new URL(link.href);
+        const reference = kinds.map((kind) => ({ kind, value: url.searchParams.get(kind) })).find(({ value }) => value);
+        setReference(reference?.value ? { kind: reference.kind, value: reference.value } : null);
+      });
+
+      window.addEventListener("popstate", () => applyReference(getActiveReference()));
+      applyReference(getActiveReference());
+    }
+  </script>
+</BaseLayout>

@@ -5,7 +5,15 @@ interface Props { project: Project; }
 const { project } = Astro.props;
 ---
 
-<article class="project-card" id={project.id} data-reveal>
+<article
+  class="project-card"
+  id={project.id}
+  data-reveal
+  data-reference-item="project"
+  data-projects={JSON.stringify([project.id])}
+  data-skills={JSON.stringify(project.technologies)}
+  data-topics="[]"
+>
   <div class="project-card__topline">
     <div class="project-card__period" aria-label={`${formatPeriod(project)}, ${getDuration(project)}`}>
       <time datetime={toYearMonth(project.startMonth, project.startYear)}>{formatMonthYear(project.startMonth, project.startYear)}</time>
@@ -23,7 +31,7 @@ const { project } = Astro.props;
     {project.achievements.slice(0, 3).map((achievement) => <li>{achievement}</li>)}
   </ul>
   <div class="tag-list" aria-label="Technologies">
-    {project.technologies.slice(0, 8).map((technology) => <span>{technology}</span>)}
+    {project.technologies.slice(0, 8).map((technology) => <a href={`/projects/?skill=${encodeURIComponent(technology)}`} data-reference-link>{technology}</a>)}
     {project.technologies.length > 8 && <span>+{project.technologies.length - 8} more</span>}
   </div>
 </article>

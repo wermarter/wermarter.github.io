@@ -1,11 +1,13 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import ReferenceTag from "../components/ReferenceTag.astro";
+import type { BlogReference } from "../data/blog";
 interface Props {
   title: string;
   description: string;
   publishedAt: Date;
   updatedAt?: Date;
-  tags: string[];
+  tags: BlogReference[];
 }
 const { title, description, publishedAt, updatedAt, tags } = Astro.props;
 const date = new Intl.DateTimeFormat("en", { dateStyle: "long" });
@@ -18,10 +20,9 @@ const date = new Intl.DateTimeFormat("en", { dateStyle: "long" });
       <p class="eyebrow">Field note · <time datetime={publishedAt.toISOString()}>{date.format(publishedAt)}</time></p>
       <h1>{title}</h1>
       <p class="lede">{description}</p>
-      <div class="tag-list">{tags.map((tag) => <span>{tag}</span>)}</div>
+      <div class="tag-list tag-list--references">{tags.map((tag) => <ReferenceTag reference={tag} />)}</div>
       {updatedAt && <p class="updated">Last tended {date.format(updatedAt)}</p>}
     </header>
     <div class="prose"><slot /></div>
   </article>
 </BaseLayout>
-

@@ -1,0 +1,18 @@
+---
+import type { BlogReference } from "../data/blog";
+import { getReferenceHref } from "../data/blog";
+import { allProjects } from "../data/personal";
+
+interface Props {
+  reference: BlogReference;
+}
+
+const { reference } = Astro.props;
+const project = reference.type === "project" ? allProjects.find(({ id }) => id === reference.value) : undefined;
+const label = project?.name ?? reference.value;
+---
+
+<a class={`reference-tag reference-tag--${reference.type}`} href={getReferenceHref(reference)} data-reference-link>
+  <span class="reference-tag__kind">{reference.type}</span>
+  <span>{label}</span>
+</a>
