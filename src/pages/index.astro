@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import BotanicalSketch from "../components/BotanicalSketch.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { coreSkills, experience, featuredProjects, profile } from "../data/personal";
+import { formatMonthYear, formatPeriod, getDuration, toYearMonth } from "../utils/calendar";
 const recentRoles = experience.slice(0, 3);
 const homeProjects = featuredProjects.slice(0, 4);
 ---
@@ -39,7 +40,10 @@ const homeProjects = featuredProjects.slice(0, 4);
     <div class="experience-preview">
       {recentRoles.map((role) => (
         <article class="experience-row">
-          <time>{role.start.replace("-", ".")} — {role.end?.replace("-", ".") ?? "now"}</time>
+          <div class="experience-row__period" aria-label={`${formatPeriod(role)}, ${getDuration(role)}`}>
+            <span><time datetime={toYearMonth(role.startMonth, role.startYear)}>{formatMonthYear(role.startMonth, role.startYear)}</time> <span aria-hidden="true">→</span> {role.endMonth && role.endYear ? <time datetime={toYearMonth(role.endMonth, role.endYear)}>{formatMonthYear(role.endMonth, role.endYear)}</time> : "Present"}</span>
+            <small>{getDuration(role)}</small>
+          </div>
           <div><h3>{role.title}</h3><p>{role.company}</p></div>
           <a href="/experience/">read the work →</a>
         </article>

@@ -16,7 +16,7 @@ export const GET: APIRoute = async () => {
       content: post.body ?? "",
     }));
 
-  return new Response(JSON.stringify({ schemaVersion: "1.0.0", ...publicProfileData, blog: posts }, null, 2), {
+  return new Response(JSON.stringify({ schemaVersion: "2.0.0", ...publicProfileData, blog: posts }, null, 2), {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "public, max-age=300",

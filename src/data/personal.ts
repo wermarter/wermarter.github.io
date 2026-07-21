@@ -1,7 +1,15 @@
-export interface Project {
+export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
+export interface CalendarPeriod {
+  startMonth: Month;
+  startYear: number;
+  endMonth: Month | null;
+  endYear: number | null;
+}
+
+export interface Project extends CalendarPeriod {
   id: string;
   name: string;
-  period: string;
   description: string;
   role: string;
   achievements: string[];
@@ -11,11 +19,9 @@ export interface Project {
   featured?: boolean;
 }
 
-export interface Experience {
+export interface Experience extends CalendarPeriod {
   company: string;
   title: string;
-  start: string;
-  end: string | null;
   summary: string[];
   projects: Project[];
 }
@@ -57,8 +63,10 @@ export const experience: Experience[] = [
   {
     company: "GBG Group Services",
     title: "Senior Backend Developer",
-    start: "2025-06",
-    end: null,
+    startMonth: 6,
+    startYear: 2025,
+    endMonth: null,
+    endYear: null,
     summary: [
       "Build ticketing services for a B2B2C marketplace, from affiliate imports and seller inventory to distribution and analytics.",
     ],
@@ -66,7 +74,10 @@ export const experience: Experience[] = [
       {
         id: "football-ticket-net",
         name: "FootballTicketNet",
-        period: "Jun 2025 - Sep 2025",
+        startMonth: 6,
+        startYear: 2025,
+        endMonth: 9,
+        endYear: 2025,
         description: "A football ticket marketplace.",
         role: "Backend developer",
         achievements: [
@@ -81,7 +92,10 @@ export const experience: Experience[] = [
       {
         id: "gigsberg",
         name: "Gigsberg",
-        period: "Oct 2025 - present",
+        startMonth: 10,
+        startYear: 2025,
+        endMonth: null,
+        endYear: null,
         description: "An international event ticket marketplace.",
         role: "Backend developer",
         achievements: [
@@ -100,8 +114,10 @@ export const experience: Experience[] = [
   {
     company: "NEXON DEV VINA",
     title: "Mid-level Backend Developer",
-    start: "2025-02",
-    end: "2025-05",
+    startMonth: 2,
+    startYear: 2025,
+    endMonth: 5,
+    endYear: 2025,
     summary: [
       "Joined technical interviews for fresher and junior roles.",
       "Gave an internal talk on distributed systems.",
@@ -110,7 +126,10 @@ export const experience: Experience[] = [
       {
         id: "project-cc",
         name: "Project CC",
-        period: "Jun 2024 - May 2025",
+        startMonth: 6,
+        startYear: 2024,
+        endMonth: 5,
+        endYear: 2025,
         description: "An observability-focused, event-driven web crawling platform.",
         role: "Developer, DevOps, SRE, and lead",
         achievements: [
@@ -126,7 +145,10 @@ export const experience: Experience[] = [
       {
         id: "project-af",
         name: "Project AF",
-        period: "Feb 2025 - May 2025",
+        startMonth: 2,
+        startYear: 2025,
+        endMonth: 5,
+        endYear: 2025,
         description: "A graphic resource management system built with overseas teams.",
         role: "Backend developer and lead",
         achievements: [
@@ -142,8 +164,10 @@ export const experience: Experience[] = [
   {
     company: "NEXON DEV VINA",
     title: "Junior Backend Developer",
-    start: "2023-04",
-    end: "2025-01",
+    startMonth: 4,
+    startYear: 2023,
+    endMonth: 1,
+    endYear: 2025,
     summary: [
       "Developed web applications and internal tools for a Korean game company while collaborating in English with overseas managers and developers.",
     ],
@@ -151,7 +175,10 @@ export const experience: Experience[] = [
       {
         id: "project-bc",
         name: "Project BC",
-        period: "Nov 2023 - May 2025",
+        startMonth: 11,
+        startYear: 2023,
+        endMonth: 5,
+        endYear: 2025,
         description: "A large-scale distributed crawling system with 800 worker instances.",
         role: "Developer, DBA, and SRE",
         achievements: [
@@ -170,7 +197,10 @@ export const experience: Experience[] = [
       {
         id: "project-inf",
         name: "Project INF",
-        period: "May 2023 - Oct 2023",
+        startMonth: 5,
+        startYear: 2023,
+        endMonth: 10,
+        endYear: 2023,
         description: "An NLP pipeline for Excel input with analytical charts and graphs.",
         role: "Backend developer",
         achievements: [
@@ -186,14 +216,19 @@ export const experience: Experience[] = [
   {
     company: "HCMC Center for Disease Control",
     title: "Full Stack Developer",
-    start: "2022-09",
-    end: "2023-03",
+    startMonth: 9,
+    startYear: 2022,
+    endMonth: 3,
+    endYear: 2023,
     summary: ["Worked directly with a laboratory team to turn their sample-testing workflow into a resilient internal platform."],
     projects: [
       {
         id: "diut",
         name: "DIUT laboratory platform",
-        period: "Sep 2022 - Mar 2023",
+        startMonth: 9,
+        startYear: 2022,
+        endMonth: 3,
+        endYear: 2023,
         description: "A multi-tenant laboratory workflow system delivered as a solo full-stack engagement.",
         role: "Solo full-stack developer",
         achievements: [
@@ -241,8 +276,10 @@ export const experience: Experience[] = [
   {
     company: "Younet Media",
     title: "Web Intern",
-    start: "2022-05",
-    end: "2022-08",
+    startMonth: 5,
+    startYear: 2022,
+    endMonth: 8,
+    endYear: 2022,
     summary: ["Maintained a social-media analytics product and migrated an internal frontend tool from Vue to a React single-page application."],
     projects: [],
   },
@@ -252,7 +289,10 @@ export const personalProjects: Project[] = [
   {
     id: "homelab",
     name: "Homelab",
-    period: "Nov 2023 - present",
+    startMonth: 11,
+    startYear: 2023,
+    endMonth: null,
+    endYear: null,
     description: "A small, highly available K3s environment running on a Proxmox bare-metal laptop cluster.",
     role: "Owner and operator",
     achievements: [

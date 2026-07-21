@@ -2,25 +2,42 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { certifications, education, experience } from "../data/personal";
-const format = (value: string | null) => value ? new Intl.DateTimeFormat("en", { month: "short", year: "numeric" }).format(new Date(`${value}-01T00:00:00Z`)) : "Present";
+import { formatMonth, formatMonthYear, formatPeriod, getDuration, toYearMonth } from "../utils/calendar";
+const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: "short", year: "numeric" }).format(new Date(`${value}-01T00:00:00Z`));
 ---
 
 <BaseLayout title="Experience" description="The working history of Hà Minh Chiến, backend engineer.">
-  <header class="page-intro"><p class="eyebrow">The path so far</p><h1>Work, in context.</h1><p class="lede">What I worked on, what changed, and the tools that helped. Project names are kept as they appear in my CV.</p></header>
+  <header class="page-intro"><p class="eyebrow">The path so far</p><h1>Work, in context.</h1><p class="lede">Roles form the main chronology; the projects inside them show where the time went and what changed along the way.</p></header>
   <section class="content-section">
-    <div class="timeline">
+    <ol class="timeline" aria-label="Career timeline">
       {experience.map((role) => (
-        <article class="role">
-          <div class="role__meta"><time>{format(role.start)}</time> — <time>{format(role.end)}</time></div>
-          <h2>{role.title} <span>at {role.company}</span></h2>
-          {role.summary.map((paragraph) => <p>{paragraph}</p>)}
-          {role.projects.length > 0 && <div class="project-grid">{role.projects.map((project) => <ProjectCard project={project} />)}</div>}
-        </article>
+        <li class="timeline__item">
+          <div class="role__when" aria-label={`${formatPeriod(role)}, ${getDuration(role)}`}>
+            <div class="role__date">
+              <span>From</span>
+              <time datetime={toYearMonth(role.startMonth, role.startYear)}><b>{formatMonth(role.startMonth)}</b><strong>{role.startYear}</strong></time>
+            </div>
+            <span class="role__date-rule" aria-hidden="true"></span>
+            <div class="role__date">
+              <span>To</span>
+              {role.endMonth && role.endYear
+                ? <time datetime={toYearMonth(role.endMonth, role.endYear)}><b>{formatMonth(role.endMonth)}</b><strong>{role.endYear}</strong></time>
+                : <span class="role__present">Present</span>}
+            </div>
+            <span class="role__duration">{getDuration(role)}</span>
+          </div>
+          <span class="timeline__marker" aria-hidden="true"></span>
+          <article class="role">
+            <p class="role__company">{role.company}</p>
+            <h2>{role.title}</h2>
+            {role.summary.map((paragraph) => <p>{paragraph}</p>)}
+            {role.projects.length > 0 && <div class="project-grid">{role.projects.map((project) => <ProjectCard project={project} />)}</div>}
+          </article>
+        </li>
       ))}
-    </div>
+    </ol>
   </section>
   <section class="content-section">
-    <div class="section-heading"><div><p class="eyebrow">Foundations</p><h2>Education & language</h2></div><div><p><strong>{education[0].institution}</strong><br />{education[0].program}, {education[0].score}<br />{format(education[0].start)} — {format(education[0].end)}</p>{certifications.map((certificate) => <p><strong>{certificate.name} {certificate.score}</strong><br />{certificate.issuer}, {format(certificate.issued)}</p>)}</div></div>
+    <div class="section-heading"><div><p class="eyebrow">Foundations</p><h2>Education & language</h2></div><div><p><strong>{education[0].institution}</strong><br />{education[0].program}, {education[0].score}<br />{formatIsoDate(education[0].start)} — {formatIsoDate(education[0].end)}</p>{certifications.map((certificate) => <p><strong>{certificate.name} {certificate.score}</strong><br />{certificate.issuer}, {formatIsoDate(certificate.issued)}</p>)}</div></div>
   </section>
 </BaseLayout>
-
