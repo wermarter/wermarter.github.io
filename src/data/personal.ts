@@ -9,11 +9,23 @@ export interface CalendarPeriod {
   endYear: number | null;
 }
 
+export enum RoleEnum {
+  BackendDeveloper = "Backend developer",
+  Developer = "Developer",
+  DevOps = "DevOps",
+  SRE = "SRE",
+  Lead = "Lead",
+  DBA = "DBA",
+  SoloFullStackDeveloper = "Solo full-stack developer",
+  Owner = "Owner",
+  Operator = "Operator",
+}
+
 export interface Project extends CalendarPeriod {
   id: string;
   name: string;
   description: string;
-  role: string;
+  roles: RoleEnum[];
   achievements: string[];
   technologies: Skill[];
   team?: string;
@@ -74,7 +86,7 @@ const experienceData: Experience[] = [
         endMonth: 9,
         endYear: 2025,
         description: "A football ticket marketplace.",
-        role: "Backend developer",
+        roles: [RoleEnum.BackendDeveloper],
         achievements: [
           "Established safe database transaction and raw SQL patterns.",
           "Refactored and tuned SQL queries with targeted index hints.",
@@ -92,7 +104,7 @@ const experienceData: Experience[] = [
         endMonth: null,
         endYear: null,
         description: "An international event ticket marketplace.",
-        role: "Backend developer",
+        roles: [RoleEnum.BackendDeveloper],
         achievements: [
           "Owned the technical and partner communication for a new ticket affiliate integration.",
           "Troubleshot and hotfixed production services with AWS CloudWatch.",
@@ -126,7 +138,7 @@ const experienceData: Experience[] = [
         endMonth: 5,
         endYear: 2025,
         description: "An observability-focused, event-driven web crawling platform.",
-        role: "Developer, DevOps, SRE, and lead",
+        roles: [RoleEnum.Developer, RoleEnum.DevOps, RoleEnum.SRE, RoleEnum.Lead],
         achievements: [
           "Provisioned AWS infrastructure with Terraform and Ansible, then bootstrapped self-managed K3s with Rancher and Helm.",
           "Migrated to EKS with cluster autoscaling and RabbitMQ-driven external metrics.",
@@ -145,7 +157,7 @@ const experienceData: Experience[] = [
         endMonth: 5,
         endYear: 2025,
         description: "A graphic resource management system built with overseas teams.",
-        role: "Backend developer and lead",
+        roles: [RoleEnum.BackendDeveloper, RoleEnum.Lead],
         achievements: [
           "Set up a backend monorepo around Clean Architecture.",
           "Reviewed backend work and collaborated on schema design and migrations.",
@@ -175,7 +187,7 @@ const experienceData: Experience[] = [
         endMonth: 5,
         endYear: 2025,
         description: "A large-scale distributed crawling system with 800 worker instances.",
-        role: "Developer, DBA, and SRE",
+        roles: [RoleEnum.Developer, RoleEnum.DBA, RoleEnum.SRE],
         achievements: [
           "Reduced deployment cost by 60% with fault-tolerant workloads on AWS ECS.",
           "Autoscaled workers using custom AWS CloudWatch metrics.",
@@ -197,7 +209,7 @@ const experienceData: Experience[] = [
         endMonth: 10,
         endYear: 2023,
         description: "An NLP pipeline for Excel input with analytical charts and graphs.",
-        role: "Backend developer",
+        roles: [RoleEnum.BackendDeveloper],
         achievements: [
           "Implemented the NLP data processing pipeline.",
           "Integrated proprietary OAuth 2.0 authorization code SSO.",
@@ -225,7 +237,7 @@ const experienceData: Experience[] = [
         endMonth: 3,
         endYear: 2023,
         description: "A multi-tenant laboratory workflow system delivered as a solo full-stack engagement.",
-        role: "Solo full-stack developer",
+        roles: [RoleEnum.SoloFullStackDeveloper],
         achievements: [
           "Translated detailed requirements directly with the client.",
           "Deployed a secure, highly available platform onto four empty Ubuntu VMs.",
@@ -289,7 +301,7 @@ const personalProjectData: Project[] = [
     endMonth: null,
     endYear: null,
     description: "A small, highly available K3s environment running on a Proxmox bare-metal laptop cluster.",
-    role: "Owner and operator",
+    roles: [RoleEnum.Owner, RoleEnum.Operator],
     achievements: [
       "Automated a three-node HA K3s cluster with Ansible.",
       "Configured Cloudflare dynamic DNS and remote VS Code tunneling.",

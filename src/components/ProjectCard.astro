@@ -23,7 +23,9 @@ const { project } = Astro.props;
         : <span class="project-card__present">Present</span>}
       <span class="project-card__duration">{getDuration(project)}</span>
     </div>
-    <span class="project-card__role">{project.role}</span>
+    <ul class="project-card__roles" aria-label="Project roles">
+      {project.roles.map((role) => <li>{role}</li>)}
+    </ul>
   </div>
   <h3>{project.url ? <a href={project.url}>{project.name}</a> : project.name}</h3>
   <p>{project.description}</p>
