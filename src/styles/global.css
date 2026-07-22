@@ -154,7 +154,7 @@ img, svg { display: block; max-width: 100%; }
 .project-card { position: relative; padding: clamp(1.5rem, 3vw, 2.4rem); border: 1px solid var(--line); border-radius: 12px 5px 12px 5px; background: var(--paper-raised); box-shadow: 0 5px 0 var(--shadow); }
 .project-card::after { content: ""; position: absolute; inset: -1px; border: 2px solid var(--bark); border-radius: inherit; opacity: 0; pointer-events: none; }
 .project-card:hover::after, .project-card:focus-within::after { opacity: 1; }
-.project-card__topline { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .65rem 1rem; color: var(--ink-soft); font-size: .78rem; letter-spacing: .04em; }
+.project-card__topline { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: .65rem 1rem; color: var(--ink-soft); font-size: .78rem; letter-spacing: .04em; }
 .project-card__period { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; font-variant-numeric: tabular-nums; }
 .project-card__arrow { color: var(--bark-soft); }
 .project-card__present { color: var(--leaf); font-weight: 750; }
