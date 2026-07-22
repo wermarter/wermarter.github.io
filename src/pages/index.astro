@@ -55,3 +55,306 @@ const recentRoles = experience.slice(0, 3);
     <a class="hand-note" href={`mailto:${profile.email}`}>say hello ↗</a>
   </section>
 </BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: min(760px, calc(100svh - 82px));
+    padding: clamp(4rem, 9vw, 9rem) var(--content-gutter);
+    border-bottom: 1px solid var(--line);
+    isolation: isolate;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    right: -10%;
+    bottom: -35%;
+    width: min(65vw, 760px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--bark-wash), transparent 66%);
+    pointer-events: none;
+  }
+
+  .hero__copy {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+  }
+
+  h1 {
+    max-width: 12ch;
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(4rem, 8.6vw, 8.5rem);
+    font-weight: 520;
+    letter-spacing: -.045em;
+    line-height: .96;
+    text-wrap: balance;
+  }
+
+  h1 em {
+    color: var(--leaf);
+    font-family: var(--hand);
+    font-weight: 600;
+  }
+
+  .lede {
+    max-width: 63ch;
+    margin: 1.5rem 0 0;
+    color: var(--ink-soft);
+    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+    line-height: 1.58;
+    text-wrap: pretty;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.75rem;
+  }
+
+  :global(.hero__plant) {
+    position: absolute;
+    z-index: 1;
+    right: -3rem;
+    bottom: -2.5rem;
+    width: min(39vw, 520px);
+    color: var(--leaf);
+    opacity: .74;
+    transform: rotate(-7deg);
+  }
+
+  .home-hero {
+    min-height: auto;
+    padding-block: clamp(3.5rem, 7vw, 6.5rem);
+  }
+
+  .home-section {
+    padding-block: clamp(3.5rem, 6vw, 5.5rem);
+  }
+
+  .home-section__heading {
+    margin-bottom: clamp(2.25rem, 4vw, 3rem);
+    padding-bottom: 1.4rem;
+  }
+
+  .experience-preview {
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .experience-row {
+    display: grid;
+    grid-template-columns: minmax(170px, .3fr) minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 2rem;
+    margin-inline: -.9rem;
+    padding: 2rem .9rem;
+    border-bottom: 1px solid var(--line);
+    color: inherit;
+    text-decoration: none;
+    transition: background-color .3s ease, padding-left .35s var(--ease-out);
+  }
+
+  .experience-row:hover {
+    padding-left: 1.25rem;
+    background: linear-gradient(90deg, var(--bark-wash), transparent 74%);
+    color: inherit;
+  }
+
+  .experience-row:focus-visible {
+    outline-offset: 0;
+  }
+
+  .experience-row__period {
+    display: grid;
+    gap: .25rem;
+    color: var(--ink-soft);
+    font-size: .88rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .experience-row__period small {
+    width: fit-content;
+    padding: .08rem .48rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    color: var(--bark);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+
+  .experience-row h3 {
+    margin: 0;
+    font: 600 1.6rem var(--display);
+  }
+
+  .experience-row p {
+    margin: .35rem 0 0;
+    color: var(--ink-soft);
+  }
+
+  .experience-row__arrow {
+    color: var(--bark);
+    font: 1.6rem var(--hand);
+    transition: translate .3s var(--ease-out);
+  }
+
+  .experience-row:hover .experience-row__arrow {
+    translate: .2rem -.2rem;
+  }
+
+  .skills-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .skill {
+    min-width: 0;
+    padding: 1.1rem 1.2rem;
+    border-left: 2px solid var(--bark-soft);
+    background: linear-gradient(90deg, var(--bark-wash), transparent 85%);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color .2s ease, background-color .2s ease, transform .3s var(--ease-out);
+  }
+
+  .skill:hover {
+    border-color: var(--leaf);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--leaf) 11%, transparent), transparent 85%);
+    color: var(--ink);
+    transform: translateX(.25rem);
+  }
+
+  .skill strong {
+    display: block;
+    font: 600 1.45rem var(--display);
+  }
+
+  .skill span {
+    color: var(--ink-soft);
+    font-size: .85rem;
+  }
+
+  .contact-note {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 2rem;
+    padding: clamp(3.5rem, 6vw, 5rem) var(--content-gutter);
+    background: linear-gradient(115deg, var(--bark-wash), transparent 55%);
+  }
+
+  .contact-note h2 {
+    max-width: 15ch;
+    margin: 0;
+    font: 520 clamp(2.8rem, 5vw, 5rem)/1 var(--display);
+  }
+
+  .contact-note p {
+    max-width: 650px;
+    color: var(--ink-soft);
+  }
+
+  .contact-note .hand-note {
+    font-size: 2.3rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__copy > * {
+      animation: settle-in .8s var(--ease-out) both;
+    }
+
+    .hero__copy > :nth-child(2) { animation-delay: .08s; }
+    .hero__copy > :nth-child(3) { animation-delay: .16s; }
+    .hero__copy > :nth-child(4) { animation-delay: .24s; }
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      min-height: auto;
+    }
+
+    :global(.hero__plant) {
+      right: -7rem;
+      width: 430px;
+    }
+
+    .experience-row {
+      grid-template-columns: 130px 1fr auto;
+    }
+
+    .skills-strip {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .hero {
+      padding-top: 4rem;
+    }
+
+    h1 {
+      font-size: clamp(3.8rem, 18vw, 5.2rem);
+    }
+
+    :global(.hero__plant) {
+      opacity: .3;
+    }
+
+    .experience-row {
+      grid-template-columns: 1fr auto;
+      gap: .45rem 1rem;
+    }
+
+    .experience-row__period {
+      grid-column: 1 / -1;
+    }
+
+    .experience-row__arrow {
+      align-self: center;
+    }
+
+    .experience-row:hover {
+      padding-left: .9rem;
+    }
+
+    .skills-strip {
+      grid-template-columns: 1fr 1fr;
+      gap: .65rem;
+    }
+
+    .skill {
+      padding: .9rem;
+    }
+
+    .contact-note {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-note .hand-note {
+      justify-self: start;
+    }
+  }
+
+  @keyframes settle-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

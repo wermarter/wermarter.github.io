@@ -78,3 +78,32 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </script>
   </body>
 </html>
+
+<style>
+  .paper-shell {
+    position: relative;
+    width: min(100%, var(--site-width));
+    min-height: 100vh;
+    margin-inline: auto;
+    overflow: clip;
+    background:
+      repeating-linear-gradient(2deg, transparent 0 13px, rgb(55 71 58 / 2%) 14px 15px),
+      var(--paper);
+    box-shadow: 0 0 60px var(--shadow);
+    transition: background-color .35s ease, box-shadow .35s ease;
+  }
+
+  .skip-link {
+    position: fixed;
+    z-index: 20;
+    top: -5rem;
+    left: 1rem;
+    padding: .6rem 1rem;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+</style>

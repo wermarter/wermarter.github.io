@@ -12,3 +12,35 @@ const year = new Date().getFullYear();
   </div>
 </footer>
 
+<style>
+  .site-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem clamp(1.25rem, 5vw, 5rem);
+    border-top: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-size: .82rem;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  div {
+    display: flex;
+    gap: 1rem;
+  }
+
+  @media (max-width: 620px) {
+    .site-footer {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    div {
+      flex-wrap: wrap;
+    }
+  }
+</style>

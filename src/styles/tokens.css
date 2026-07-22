@@ -1,0 +1,51 @@
+:root {
+  color-scheme: light;
+
+  --paper: #eff1e7;
+  --paper-raised: #f8f8f1;
+  --paper-deep: #dfe4d4;
+  --ink: #27312b;
+  --ink-soft: #59635d;
+  --graphite: #70786f;
+  --leaf: #3f6b48;
+  --leaf-bright: #78965e;
+  --moss: #a8b995;
+  --bark: #7b5b45;
+  --bark-soft: #b39176;
+  --bark-wash: rgb(123 91 69 / 8%);
+  --line: rgb(48 61 51 / 18%);
+  --shadow: rgb(39 51 43 / 10%);
+
+  --font-display: "Newsreader Variable", Georgia, serif;
+  --font-body: "Atkinson Hyperlegible Next Variable", system-ui, sans-serif;
+  --font-hand: "Caveat Variable", cursive;
+
+  /* Compatibility aliases keep component declarations terse. */
+  --display: var(--font-display);
+  --body: var(--font-body);
+  --hand: var(--font-hand);
+
+  --site-width: 92.5rem;
+  --content-gutter: clamp(1.25rem, 8vw, 8rem);
+  --radius-pill: 999px;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #202923;
+  --paper-raised: #29332c;
+  --paper-deep: #171e1a;
+  --ink: #edf0e1;
+  --ink-soft: #bbc5b8;
+  --graphite: #96a098;
+  --leaf: #9ec584;
+  --leaf-bright: #c0d99e;
+  --moss: #607a58;
+  --bark: #d0a27f;
+  --bark-soft: #98755f;
+  --bark-wash: rgb(208 162 127 / 8%);
+  --line: rgb(224 235 219 / 20%);
+  --shadow: rgb(0 0 0 / 30%);
+}

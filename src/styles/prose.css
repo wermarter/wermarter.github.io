@@ -1,0 +1,56 @@
+/* Rendered MDX is slotted content, so article typography intentionally stays global. */
+
+.prose {
+  padding-top: 2.5rem;
+  font-size: 1.1rem;
+}
+
+.prose > :where(p, ul, ol, blockquote) {
+  max-width: 72ch;
+}
+
+.prose :where(h2, h3) {
+  font-family: var(--display);
+  line-height: 1.1;
+  text-wrap: balance;
+  scroll-margin-top: 8rem;
+}
+
+.prose :where(h2) {
+  margin-top: 2.6rem;
+  font-size: 2.4rem;
+}
+
+.prose :where(h3) {
+  margin-top: 2rem;
+  font-size: 1.7rem;
+}
+
+.prose :where(pre) {
+  overflow-x: auto;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  background: var(--paper-deep);
+  font-size: .9rem;
+}
+
+.prose :where(code):not(pre code) {
+  padding: .1em .3em;
+  border-radius: .25rem;
+  background: var(--paper-deep);
+  font-size: .9em;
+}
+
+.prose :where(blockquote) {
+  margin-inline: 0;
+  padding-left: 1.5rem;
+  border-left: 3px solid var(--bark);
+  color: var(--ink-soft);
+  font-family: var(--display);
+  font-size: 1.3rem;
+}
+
+.prose :where(img) {
+  height: auto;
+  border: 1px solid var(--line);
+}

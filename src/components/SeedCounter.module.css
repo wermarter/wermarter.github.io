@@ -1,0 +1,28 @@
+.counter {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border: 1px dashed var(--leaf);
+  text-align: center;
+}
+
+.counter p {
+  min-height: 2rem;
+  color: var(--leaf);
+  font-size: 1.5rem;
+  letter-spacing: .3rem;
+}
+
+.counter button {
+  padding: .55rem .9rem;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  font: 700 .9rem var(--body);
+  cursor: pointer;
+}
+
+.counter button:disabled {
+  opacity: .6;
+  cursor: default;
+}

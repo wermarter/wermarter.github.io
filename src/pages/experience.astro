@@ -46,3 +46,296 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
     <div class="section-heading"><div><p class="eyebrow">Foundations</p><h2>Education & language</h2></div><div><p><strong>{education[0].institution}</strong><br />{education[0].program}, {education[0].score}<br />{formatIsoDate(education[0].start)} — {formatIsoDate(education[0].end)}</p>{certifications.map((certificate) => <p><strong>{certificate.name} {certificate.score}</strong><br />{certificate.issuer}, {formatIsoDate(certificate.issued)}</p>)}</div></div>
   </section>
 </BaseLayout>
+
+<style>
+  .timeline {
+    display: grid;
+    gap: 4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .timeline__item {
+    --timeline-leaf-color: var(--moss);
+    --timeline-leaf-fill: 38%;
+    --timeline-leaf-width: 28px;
+    --timeline-leaf-flip: 1;
+    --timeline-leaf-tilt: -3deg;
+
+    display: grid;
+    grid-template-columns: minmax(132px, 164px) 28px minmax(0, 1fr);
+    align-items: stretch;
+    gap: clamp(1rem, 2.5vw, 2rem);
+    scroll-margin-top: 7rem;
+  }
+
+  .timeline__item:target .role {
+    margin: -.9rem;
+    padding: .9rem;
+    border-radius: 8px 3px 10px 4px;
+    background: linear-gradient(90deg, var(--bark-wash), transparent 82%);
+  }
+
+  .timeline__item:nth-child(even) {
+    --timeline-leaf-flip: -1;
+    --timeline-leaf-tilt: 3deg;
+  }
+
+  .timeline__item:nth-child(4) {
+    --timeline-leaf-color: color-mix(in srgb, var(--leaf) 38%, var(--moss));
+    --timeline-leaf-fill: 42%;
+    --timeline-leaf-width: 30px;
+  }
+
+  .timeline__item:nth-child(3) {
+    --timeline-leaf-color: color-mix(in srgb, var(--leaf) 62%, var(--moss));
+    --timeline-leaf-fill: 48%;
+    --timeline-leaf-width: 32px;
+  }
+
+  .timeline__item:nth-child(2) {
+    --timeline-leaf-color: var(--leaf);
+    --timeline-leaf-fill: 54%;
+    --timeline-leaf-width: 34px;
+  }
+
+  .timeline__item:first-child {
+    --timeline-leaf-color: var(--leaf-bright);
+    --timeline-leaf-fill: 64%;
+    --timeline-leaf-width: 36px;
+  }
+
+  .timeline__marker {
+    position: relative;
+    display: block;
+  }
+
+  .timeline__marker::after {
+    content: "";
+    position: absolute;
+    top: .9rem;
+    bottom: -4rem;
+    left: 50%;
+    width: 2px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--leaf) 58%, var(--bark));
+    box-shadow: 1px 0 0 var(--bark-wash);
+    translate: -50% 0;
+  }
+
+  .timeline__item:last-child .timeline__marker::after {
+    bottom: 0;
+    background: linear-gradient(color-mix(in srgb, var(--leaf) 58%, var(--bark)), var(--bark-soft) 78%, transparent);
+  }
+
+  .timeline__leaf {
+    position: absolute;
+    z-index: 1;
+    top: -.55rem;
+    left: 50%;
+    width: var(--timeline-leaf-width);
+    max-width: none;
+    overflow: visible;
+    color: var(--timeline-leaf-color);
+    translate: -50% 0;
+    transform: rotate(var(--timeline-leaf-tilt)) scaleX(var(--timeline-leaf-flip));
+    transform-origin: 50% 88%;
+    transition: filter .3s ease, scale .35s var(--ease-out);
+  }
+
+  .timeline__leaf-shape {
+    fill: color-mix(in srgb, currentColor var(--timeline-leaf-fill), var(--paper));
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    transition: fill .3s ease;
+  }
+
+  .timeline__leaf-vein {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.15;
+    stroke-linecap: round;
+    opacity: .72;
+  }
+
+  .timeline__item:hover .timeline__leaf {
+    filter: drop-shadow(0 2px 2px var(--shadow));
+    scale: 1.08;
+  }
+
+  .timeline__item:hover .timeline__leaf-shape {
+    fill: color-mix(in srgb, var(--leaf-bright) 68%, var(--paper));
+  }
+
+  .role__when {
+    position: sticky;
+    top: 7rem;
+    align-self: start;
+    display: grid;
+    justify-items: end;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .role__date {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    align-items: baseline;
+    gap: .6rem;
+  }
+
+  .role__date > span:first-child {
+    font-size: .65rem;
+    font-weight: 750;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .role__date time {
+    display: flex;
+    align-items: baseline;
+    gap: .35rem;
+  }
+
+  .role__date b {
+    color: var(--bark);
+    font-size: .78rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .role__date strong,
+  .role__present {
+    color: var(--ink);
+    font: 550 1.42rem/1 var(--display);
+  }
+
+  .role__present {
+    grid-column: 2;
+    color: var(--leaf);
+  }
+
+  .role__date-rule {
+    width: 1px;
+    height: .8rem;
+    margin: .3rem 2.25rem .3rem 0;
+    background: var(--line);
+  }
+
+  .role__duration {
+    margin-top: .65rem;
+    padding: .12rem .55rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    color: var(--bark);
+    font-size: .7rem;
+    font-weight: 750;
+    letter-spacing: .04em;
+  }
+
+  .role {
+    min-width: 0;
+  }
+
+  .role__company {
+    margin: 0 0 .45rem;
+    color: var(--bark);
+    font-size: .76rem;
+    font-weight: 750;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .role h2 {
+    max-width: 18ch;
+    margin: 0 0 .8rem;
+    font: 600 clamp(2rem, 4vw, 3.3rem)/1 var(--display);
+    text-wrap: balance;
+  }
+
+  .role > p {
+    max-width: 800px;
+    color: var(--ink-soft);
+  }
+
+  .role .project-grid {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 900px) {
+    .timeline__item {
+      grid-template-columns: 130px 24px minmax(0, 1fr);
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .timeline {
+      gap: 3rem;
+    }
+
+    .timeline__item {
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 0 1rem;
+    }
+
+    .timeline__marker {
+      grid-row: 1 / span 2;
+      grid-column: 1;
+    }
+
+    .timeline__leaf {
+      top: -.35rem;
+    }
+
+    .timeline__marker::after {
+      top: .75rem;
+      bottom: -3rem;
+    }
+
+    .role__when {
+      position: static;
+      grid-row: 1;
+      grid-column: 2;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      gap: .4rem;
+      text-align: left;
+    }
+
+    .role__date {
+      display: flex;
+      align-items: baseline;
+      gap: .35rem;
+    }
+
+    .role__date > span:first-child {
+      display: none;
+    }
+
+    .role__date-rule {
+      width: 1rem;
+      height: 1px;
+      margin: 0;
+    }
+
+    .role__present {
+      font-size: 1.2rem;
+    }
+
+    .role__duration {
+      margin: 0 0 0 .3rem;
+    }
+
+    .role {
+      grid-row: 2;
+      grid-column: 2;
+      margin-top: 1.1rem;
+    }
+  }
+</style>

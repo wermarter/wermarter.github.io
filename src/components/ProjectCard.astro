@@ -39,3 +39,138 @@ const { project } = Astro.props;
     {project.technologies.length > 8 && <span>+{project.technologies.length - 8} more</span>}
   </div>
 </article>
+
+<style>
+  .project-card {
+    position: relative;
+    padding: clamp(1.5rem, 3vw, 2.4rem);
+    border: 1px solid var(--line);
+    border-radius: 12px 5px 12px 5px;
+    background: var(--paper-raised);
+    box-shadow: 0 5px 0 var(--shadow);
+  }
+
+  .project-card::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border: 2px solid var(--bark);
+    border-radius: inherit;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .project-card:hover::after,
+  .project-card:focus-within::after {
+    opacity: 1;
+  }
+
+  .project-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1rem 1.5rem;
+  }
+
+  .project-card__identity {
+    display: grid;
+    flex: 1 1 14rem;
+    gap: .7rem;
+    min-width: min(100%, 14rem);
+  }
+
+  .project-card__period {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem;
+    color: var(--ink-soft);
+    font-size: .78rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .04em;
+  }
+
+  .project-card__arrow {
+    color: var(--bark-soft);
+  }
+
+  .project-card__present {
+    color: var(--leaf);
+    font-weight: 750;
+  }
+
+  .project-card__duration {
+    margin-left: .2rem;
+    padding: .08rem .45rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    color: var(--bark);
+    font-size: .68rem;
+    font-weight: 750;
+    white-space: nowrap;
+  }
+
+  .project-card__roles {
+    display: grid;
+    flex: 0 0 auto;
+    justify-items: start;
+    min-width: 0;
+    max-width: 24ch;
+    margin: 0;
+    padding: 0;
+    color: var(--ink-soft);
+    font-size: .72rem;
+    font-weight: 750;
+    letter-spacing: .08em;
+    line-height: 1.45;
+    list-style: none;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .project-card__roles li {
+    max-width: 100%;
+    overflow-wrap: normal;
+  }
+
+  h3 {
+    margin: 0;
+    overflow-wrap: anywhere;
+    font: 600 2rem var(--display);
+  }
+
+  .project-card__link {
+    text-decoration: none;
+  }
+
+  .project-card__link::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .project-card > p {
+    color: var(--ink-soft);
+  }
+
+  .project-card > ul {
+    padding-left: 1.15rem;
+  }
+
+  .project-card > ul li::marker {
+    color: var(--leaf);
+  }
+
+  .tag-list > a {
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .project-card::after {
+      transition: opacity .35s ease;
+    }
+  }
+</style>

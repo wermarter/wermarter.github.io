@@ -156,3 +156,170 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
     }
   </script>
 </BaseLayout>
+
+<style>
+  .reference-browser {
+    display: grid;
+    gap: clamp(4rem, 7vw, 7rem);
+  }
+
+  .reference-page-intro {
+    padding-block: clamp(4rem, 7vw, 6rem);
+  }
+
+  .reference-filter {
+    position: sticky;
+    z-index: 4;
+    top: 98px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+    align-items: end;
+    gap: .8rem;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px 4px 12px 5px;
+    background: color-mix(in srgb, var(--paper-raised) 92%, transparent);
+    box-shadow: 0 6px 18px var(--shadow);
+    backdrop-filter: blur(14px);
+  }
+
+  .reference-filter label {
+    display: grid;
+    min-width: 0;
+    gap: .35rem;
+  }
+
+  .reference-filter label > span {
+    color: var(--bark);
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+  }
+
+  .reference-filter select {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 2.9rem;
+    padding: .45rem 2.2rem .45rem .75rem;
+    border: 1px solid var(--line);
+    border-radius: 5px 9px 5px 9px;
+    background: var(--paper);
+    color: var(--ink);
+    font: 600 .9rem var(--body);
+    cursor: pointer;
+  }
+
+  .reference-filter select:hover,
+  .reference-filter select:focus {
+    border-color: var(--bark-soft);
+  }
+
+  .reference-filter select:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+  }
+
+  .reference-filter__clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.9rem;
+    padding-inline: .9rem;
+    border: 1px solid transparent;
+    color: var(--bark);
+    font-size: .82rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .reference-summary {
+    margin: -2.8rem 0 0;
+    color: var(--ink-soft);
+    font-size: .92rem;
+  }
+
+  .reference-results {
+    display: grid;
+    gap: 2rem;
+    scroll-margin-top: 12rem;
+  }
+
+  .reference-results + .reference-results {
+    padding-top: clamp(4rem, 7vw, 6rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .reference-results__heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .reference-results__heading .eyebrow {
+    margin-bottom: .35rem;
+  }
+
+  .reference-results__heading h2 {
+    margin: 0;
+    font: 560 clamp(2.6rem, 5vw, 4.5rem)/1 var(--display);
+    letter-spacing: -.035em;
+  }
+
+  .reference-results__heading h2 span {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2rem;
+    aspect-ratio: 1;
+    margin-left: .35rem;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    color: var(--bark);
+    font: 750 .78rem var(--body);
+    vertical-align: .35em;
+  }
+
+  .filter-empty {
+    margin: 0;
+    padding: 2rem;
+    border: 1px dashed var(--line);
+    border-radius: 8px 4px 10px 5px;
+    background: var(--paper-raised);
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 900px) {
+    .reference-filter {
+      top: 126px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .reference-filter__clear {
+      grid-column: 1 / -1;
+      justify-self: start;
+      min-height: auto;
+      padding: .2rem 0;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .reference-filter {
+      position: static;
+      grid-template-columns: 1fr;
+    }
+
+    .reference-filter__clear {
+      grid-column: auto;
+    }
+
+    .reference-summary {
+      margin-top: -2.8rem;
+    }
+
+    .reference-results__heading {
+      display: grid;
+    }
+  }
+</style>

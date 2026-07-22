@@ -16,6 +16,20 @@ npm test
 npm run build
 ```
 
+## CSS architecture
+
+The site uses Astro's native scoped CSS rather than a styling framework:
+
+- `src/styles/global.css` is the single global entry point and declares cascade order.
+- `src/styles/tokens.css` contains theme, typography, layout, and motion tokens.
+- `src/styles/reset.css` and the base layer contain only document-wide defaults.
+- `src/styles/patterns.css` contains semantic patterns shared across multiple pages, such as buttons, section headings, tag lists, and content grids.
+- `src/styles/prose.css` is loaded by `BlogPostLayout` for rendered Markdown and MDX content.
+- Astro components and pages keep their visual rules in scoped `<style>` blocks.
+- React islands use colocated CSS Modules.
+
+When adding a rule, keep it with the component or page that owns the markup. Promote it to `patterns.css` only when multiple owners use the same visual contract, and add a token only when a design value is intentionally shared.
+
 ## Edit portfolio data
 
 Professional experience, projects, education, certificates, and contact details live in `src/data/personal.ts`. Canonical skill names and their ranking behavior live in `src/data/skills.ts`. The same sources power the pages and the public machine-readable endpoint at [`/data.json`](https://wermarter.github.io/data.json).

@@ -15,3 +15,72 @@ const { class: className = "", label = "" } = Astro.props;
     <path class="pot" d="M117 189h80l-9 26h-61l-10-26Z" />
   </g>
 </svg>
+
+<style>
+  path {
+    vector-effect: non-scaling-stroke;
+    stroke-width: 2.1;
+  }
+
+  .branch,
+  .veins {
+    stroke: var(--bark);
+  }
+
+  .echo {
+    opacity: .45;
+    stroke-width: 1;
+  }
+
+  .veins {
+    opacity: .62;
+    stroke-width: 1.2;
+  }
+
+  .leaf {
+    stroke: var(--leaf);
+  }
+
+  .pot {
+    fill: var(--paper);
+    stroke: var(--bark);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .branch {
+      stroke-dasharray: 420;
+      stroke-dashoffset: 420;
+      animation: draw-branch 1.8s .25s var(--ease-out) forwards;
+    }
+
+    .leaf,
+    .veins,
+    .pot {
+      opacity: 0;
+      animation: leaf-in .65s var(--ease-out) forwards;
+    }
+
+    .leaf--1 { animation-delay: .55s; }
+    .leaf--2 { animation-delay: .68s; }
+    .leaf--3 { animation-delay: .81s; }
+    .leaf--4 { animation-delay: .94s; }
+    .veins { animation-delay: 1.07s; }
+    .pot { animation-delay: .35s; }
+  }
+
+  @keyframes draw-branch {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes leaf-in {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

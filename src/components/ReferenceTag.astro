@@ -16,3 +16,37 @@ const label = project?.name ?? reference.value;
   <span class="reference-tag__kind">{reference.type}</span>
   <span>{label}</span>
 </a>
+
+<style>
+  .reference-tag {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    gap: .4rem;
+    padding: .12rem .58rem .12rem .22rem;
+  }
+
+  .reference-tag__kind {
+    padding: .13rem .38rem;
+    border-radius: var(--radius-pill);
+    background: var(--paper-deep);
+    color: var(--bark);
+    font-size: .6rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+
+  .reference-tag--skill .reference-tag__kind {
+    color: var(--leaf);
+  }
+
+  .reference-tag--project .reference-tag__kind {
+    color: var(--bark);
+  }
+
+  .reference-tag--topic .reference-tag__kind {
+    color: var(--graphite);
+  }
+</style>

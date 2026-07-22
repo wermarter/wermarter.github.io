@@ -33,3 +33,64 @@ const topics = post.data.tags.filter((tag) => tag.type === "topic").map((tag) =>
   </div>
   <span>open note →</span>
 </article>
+
+<style>
+  .blog-card {
+    display: grid;
+    grid-template-columns: 150px 1fr auto;
+    align-items: start;
+    gap: 2rem;
+    margin-inline: -.9rem;
+    padding: 2rem .9rem;
+    border-bottom: 1px solid var(--line);
+    transition: background-color .3s ease, transform .35s var(--ease-out);
+  }
+
+  .blog-card:hover {
+    background: linear-gradient(90deg, var(--bark-wash), transparent);
+    transform: translateX(.35rem);
+  }
+
+  time {
+    color: var(--ink-soft);
+    font-size: .9rem;
+  }
+
+  h2 {
+    margin: 0;
+    font: 600 clamp(1.7rem, 3vw, 2.5rem) var(--display);
+  }
+
+  h2 a {
+    text-decoration: none;
+  }
+
+  p {
+    max-width: 680px;
+    margin: .5rem 0 0;
+    color: var(--ink-soft);
+  }
+
+  .blog-card > span {
+    color: var(--bark);
+    font: 1.5rem var(--hand);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .blog-card {
+      grid-template-columns: 120px 1fr;
+    }
+
+    .blog-card > span {
+      display: none;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .blog-card {
+      grid-template-columns: 1fr;
+      gap: .45rem;
+    }
+  }
+</style>
