@@ -50,7 +50,7 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
 <style>
   .timeline {
     display: grid;
-    gap: 4rem;
+    gap: 3.25rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -115,7 +115,7 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
     content: "";
     position: absolute;
     top: .9rem;
-    bottom: -4rem;
+    bottom: -3.25rem;
     left: 50%;
     width: 2px;
     border-radius: var(--radius-pill);
@@ -252,7 +252,7 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
   .role h2 {
     max-width: 18ch;
     margin: 0 0 .8rem;
-    font: 600 clamp(2rem, 4vw, 3.3rem)/1 var(--display);
+    font: 600 clamp(1.9rem, 3.5vw, 2.9rem)/1 var(--display);
     text-wrap: balance;
   }
 
@@ -262,7 +262,7 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
   }
 
   .role .project-grid {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
 
   @media (max-width: 900px) {
@@ -274,7 +274,7 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
 
   @media (max-width: 620px) {
     .timeline {
-      gap: 3rem;
+      gap: 2.5rem;
     }
 
     .timeline__item {
@@ -293,7 +293,7 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
 
     .timeline__marker::after {
       top: .75rem;
-      bottom: -3rem;
+      bottom: -2.5rem;
     }
 
     .role__when {

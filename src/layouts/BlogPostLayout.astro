@@ -32,18 +32,18 @@ const date = new Intl.DateTimeFormat("en", { dateStyle: "long" });
   .blog-post {
     max-width: 900px;
     margin: 0 auto;
-    padding: clamp(4rem, 8vw, 8rem) clamp(1.25rem, 5vw, 4rem);
+    padding: var(--space-section) clamp(1.25rem, 5vw, 4rem);
   }
 
   .blog-post__header {
-    padding-bottom: 2.5rem;
+    padding-bottom: 2rem;
     border-bottom: 1px solid var(--line);
   }
 
   h1 {
     margin: 0;
     font-family: var(--display);
-    font-size: clamp(3.2rem, 8vw, 6.5rem);
+    font-size: clamp(3rem, 6.5vw, 5.5rem);
     font-weight: 520;
     letter-spacing: -.045em;
     line-height: .96;
@@ -51,7 +51,7 @@ const date = new Intl.DateTimeFormat("en", { dateStyle: "long" });
 
   .lede {
     color: var(--ink-soft);
-    font-size: 1.25rem;
+    font-size: 1.18rem;
   }
 
   .updated {

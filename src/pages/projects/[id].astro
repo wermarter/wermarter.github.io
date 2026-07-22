@@ -116,9 +116,9 @@ const isOngoing = project.endMonth === null || project.endYear === null;
     display: grid;
     grid-template-columns: minmax(0, 1.3fr) minmax(270px, .7fr);
     align-items: end;
-    gap: clamp(3rem, 8vw, 8rem);
+    gap: clamp(2.5rem, 6vw, 5rem);
     overflow: hidden;
-    padding: clamp(4rem, 8vw, 7rem) var(--project-gutter);
+    padding: var(--space-section-compact) var(--project-gutter);
     border-bottom: 1px solid var(--line);
     background: linear-gradient(125deg, transparent 42%, var(--bark-wash));
     isolation: isolate;
@@ -140,30 +140,30 @@ const isOngoing = project.endMonth === null || project.endYear === null;
   }
 
   .project-detail .back-link {
-    margin-bottom: clamp(3rem, 6vw, 5rem);
+    margin-bottom: clamp(2rem, 3vw, 2.75rem);
   }
 
   .project-detail__intro h1 {
     max-width: 11ch;
     margin: 0;
     overflow-wrap: anywhere;
-    font: 520 clamp(4rem, 9vw, 8.7rem)/.88 var(--display);
+    font: 520 clamp(3.5rem, 7.5vw, 7rem)/.92 var(--display);
     letter-spacing: -.055em;
     text-wrap: balance;
   }
 
   .project-detail__lede {
     max-width: 62ch;
-    margin: 1.7rem 0 0;
+    margin: 1.25rem 0 0;
     color: var(--ink-soft);
-    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    font-size: clamp(1.1rem, 1.7vw, 1.3rem);
     line-height: 1.55;
     text-wrap: pretty;
   }
 
   .project-detail__external {
     gap: .3rem;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
 
   .project-facts {
@@ -175,19 +175,6 @@ const isOngoing = project.endMonth === null || project.endYear === null;
     background: color-mix(in srgb, var(--paper-raised) 90%, transparent);
     box-shadow: 0 6px 0 var(--shadow);
     backdrop-filter: blur(12px);
-  }
-
-  .project-facts::before {
-    content: "project specimen";
-    position: absolute;
-    top: -.72rem;
-    right: 1.25rem;
-    padding: .1rem .55rem;
-    background: var(--paper);
-    color: var(--bark);
-    font: 700 .7rem var(--hand);
-    letter-spacing: .04em;
-    transform: rotate(1deg);
   }
 
   .project-facts > div {
@@ -244,15 +231,15 @@ const isOngoing = project.endMonth === null || project.endYear === null;
   .project-detail__work {
     display: grid;
     grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
-    gap: clamp(4rem, 9vw, 9rem);
-    padding: clamp(5rem, 9vw, 8rem) var(--project-gutter);
+    gap: clamp(3rem, 6vw, 6rem);
+    padding: var(--space-section) var(--project-gutter);
     border-bottom: 1px solid var(--line);
   }
 
   .project-detail__section-heading h2,
   .project-toolkit h2 {
     margin: 0;
-    font: 540 clamp(2.7rem, 5vw, 5rem)/.96 var(--display);
+    font: 540 clamp(2.4rem, 4.2vw, 4rem)/.98 var(--display);
     letter-spacing: -.04em;
     text-wrap: balance;
   }
@@ -261,7 +248,7 @@ const isOngoing = project.endMonth === null || project.endYear === null;
     position: relative;
     display: grid;
     gap: 0;
-    margin: clamp(3rem, 6vw, 5rem) 0 0;
+    margin: clamp(2.25rem, 4vw, 3.5rem) 0 0;
     padding: 0;
     list-style: none;
   }
@@ -342,7 +329,7 @@ const isOngoing = project.endMonth === null || project.endYear === null;
   }
 
   .project-detail__notes {
-    padding: clamp(5rem, 9vw, 8rem) var(--project-gutter);
+    padding: var(--space-section) var(--project-gutter);
     border-bottom: 1px solid var(--line);
   }
 
@@ -373,11 +360,11 @@ const isOngoing = project.endMonth === null || project.endYear === null;
     }
 
     .project-detail .back-link {
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
     .project-detail__work {
-      gap: 4rem;
+      gap: 3rem;
     }
 
     .outcome-list li {

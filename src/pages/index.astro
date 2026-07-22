@@ -90,7 +90,7 @@ const recentRoles = experience.slice(0, 3);
     max-width: 12ch;
     margin: 0;
     font-family: var(--display);
-    font-size: clamp(4rem, 8.6vw, 8.5rem);
+    font-size: clamp(3.8rem, 7.5vw, 7.25rem);
     font-weight: 520;
     letter-spacing: -.045em;
     line-height: .96;
@@ -105,9 +105,9 @@ const recentRoles = experience.slice(0, 3);
 
   .lede {
     max-width: 63ch;
-    margin: 1.5rem 0 0;
+    margin: 1.2rem 0 0;
     color: var(--ink-soft);
-    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+    font-size: clamp(1.08rem, 1.6vw, 1.25rem);
     line-height: 1.58;
     text-wrap: pretty;
   }
@@ -116,7 +116,7 @@ const recentRoles = experience.slice(0, 3);
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-top: 1.75rem;
+    margin-top: 1.4rem;
   }
 
   :global(.hero__plant) {
@@ -132,16 +132,16 @@ const recentRoles = experience.slice(0, 3);
 
   .home-hero {
     min-height: auto;
-    padding-block: clamp(3.5rem, 7vw, 6.5rem);
+    padding-block: var(--space-section-compact);
   }
 
   .home-section {
-    padding-block: clamp(3.5rem, 6vw, 5.5rem);
+    padding-block: var(--space-section-compact);
   }
 
   .home-section__heading {
-    margin-bottom: clamp(2.25rem, 4vw, 3rem);
-    padding-bottom: 1.4rem;
+    margin-bottom: clamp(1.75rem, 3vw, 2.25rem);
+    padding-bottom: 1.2rem;
   }
 
   .experience-preview {
@@ -156,7 +156,7 @@ const recentRoles = experience.slice(0, 3);
     align-items: start;
     gap: 2rem;
     margin-inline: -.9rem;
-    padding: 2rem .9rem;
+    padding: 1.5rem .9rem;
     border-bottom: 1px solid var(--line);
     color: inherit;
     text-decoration: none;
@@ -250,14 +250,14 @@ const recentRoles = experience.slice(0, 3);
     grid-template-columns: 1fr auto;
     align-items: end;
     gap: 2rem;
-    padding: clamp(3.5rem, 6vw, 5rem) var(--content-gutter);
+    padding: var(--space-section-compact) var(--content-gutter);
     background: linear-gradient(115deg, var(--bark-wash), transparent 55%);
   }
 
   .contact-note h2 {
     max-width: 15ch;
     margin: 0;
-    font: 520 clamp(2.8rem, 5vw, 5rem)/1 var(--display);
+    font: 520 clamp(2.5rem, 4.2vw, 4rem)/1 var(--display);
   }
 
   .contact-note p {

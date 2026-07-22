@@ -17,7 +17,7 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
 ---
 
 <BaseLayout title="Projects" description="Trace the skills behind Hà Minh Chiến’s projects and field notes.">
-  <header class="page-intro reference-page-intro">
+  <header class="page-intro">
     <p class="eyebrow">A connected work index</p>
     <h1>Trace skill to evidence.</h1>
     <p class="lede">Choose a skill, project, or topic to find the systems where it was used and the notes that explain the thinking behind it.</p>
@@ -160,11 +160,7 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
 <style>
   .reference-browser {
     display: grid;
-    gap: clamp(4rem, 7vw, 7rem);
-  }
-
-  .reference-page-intro {
-    padding-block: clamp(4rem, 7vw, 6rem);
+    gap: var(--space-section-compact);
   }
 
   .reference-filter {
@@ -176,11 +172,13 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
     align-items: end;
     gap: .8rem;
     padding: 1rem;
-    border: 1px solid var(--line);
+    border: 1px solid color-mix(in srgb, var(--bark-soft) 55%, var(--line));
     border-radius: 10px 4px 12px 5px;
-    background: color-mix(in srgb, var(--paper-raised) 92%, transparent);
-    box-shadow: 0 6px 18px var(--shadow);
-    backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--paper-deep) 94%, transparent);
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--paper-raised) 65%, transparent) inset,
+      0 12px 30px color-mix(in srgb, var(--ink) 16%, transparent);
+    backdrop-filter: blur(14px) saturate(.8);
   }
 
   .reference-filter label {
@@ -235,7 +233,7 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
   }
 
   .reference-summary {
-    margin: -2.8rem 0 0;
+    margin: -2rem 0 0;
     color: var(--ink-soft);
     font-size: .92rem;
   }
@@ -247,7 +245,7 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
   }
 
   .reference-results + .reference-results {
-    padding-top: clamp(4rem, 7vw, 6rem);
+    padding-top: var(--space-section-compact);
     border-top: 1px solid var(--line);
   }
 
@@ -264,7 +262,7 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
 
   .reference-results__heading h2 {
     margin: 0;
-    font: 560 clamp(2.6rem, 5vw, 4.5rem)/1 var(--display);
+    font: 560 clamp(2.25rem, 4vw, 3.75rem)/1 var(--display);
     letter-spacing: -.035em;
   }
 
@@ -315,7 +313,7 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
     }
 
     .reference-summary {
-      margin-top: -2.8rem;
+      margin-top: -2rem;
     }
 
     .reference-results__heading {

@@ -27,6 +27,8 @@
 
   --site-width: 92.5rem;
   --content-gutter: clamp(1.25rem, 8vw, 8rem);
+  --space-section: clamp(3.25rem, 5vw, 4.75rem);
+  --space-section-compact: clamp(2.5rem, 4vw, 3.75rem);
   --radius-pill: 999px;
   --ease-out: cubic-bezier(.22, 1, .36, 1);
 }
