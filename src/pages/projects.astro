@@ -171,8 +171,8 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
     align-items: end;
-    gap: .8rem;
-    padding: 1rem;
+    gap: .65rem;
+    padding: .7rem .8rem;
     border: 1px solid color-mix(in srgb, var(--bark-soft) 55%, var(--line));
     border-radius: 10px 4px 12px 5px;
     background: color-mix(in srgb, var(--paper-deep) 94%, transparent);
@@ -185,7 +185,7 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
   .reference-filter label {
     display: grid;
     min-width: 0;
-    gap: .35rem;
+    gap: .2rem;
   }
 
   .reference-filter label > span {
@@ -193,6 +193,7 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
     font-size: .68rem;
     font-weight: 800;
     letter-spacing: .11em;
+    line-height: 1;
     text-transform: uppercase;
   }
 
@@ -200,8 +201,8 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
     width: 100%;
     min-width: 0;
     max-width: 100%;
-    min-height: 2.9rem;
-    padding: .45rem 2.2rem .45rem .75rem;
+    min-height: 2.55rem;
+    padding: .35rem 2.2rem .35rem .7rem;
     border: 1px solid var(--line);
     border-radius: 5px 9px 5px 9px;
     background: var(--paper);
@@ -224,8 +225,8 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 2.9rem;
-    padding-inline: .9rem;
+    min-height: 2.55rem;
+    padding-inline: .8rem;
     border: 1px solid transparent;
     color: var(--bark);
     font-size: .82rem;
@@ -292,25 +293,23 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
   @media (max-width: 900px) {
     .reference-filter {
       top: 126px;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .reference-filter__clear {
-      grid-column: 1 / -1;
-      justify-self: start;
-      min-height: auto;
-      padding: .2rem 0;
     }
   }
 
   @media (max-width: 620px) {
     .reference-filter {
-      position: static;
+      position: relative;
+      top: auto;
       grid-template-columns: 1fr;
+      gap: .55rem;
     }
 
     .reference-filter__clear {
-      grid-column: auto;
+      position: absolute;
+      top: .45rem;
+      right: .8rem;
+      min-height: 1.75rem;
+      padding: .15rem 0;
     }
 
     .reference-summary {
