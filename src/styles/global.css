@@ -161,7 +161,7 @@ img, svg { display: block; max-width: 100%; }
 .project-card__duration { margin-left: .2rem; padding: .08rem .45rem; border: 1px solid var(--line); border-radius: 999px; color: var(--bark); font-size: .68rem; font-weight: 750; white-space: nowrap; }
 .project-card__roles { display: grid; flex: 1 1 0; justify-items: end; min-width: 0; max-width: 24ch; margin: 0 0 0 auto; padding: 0; font-size: .72rem; font-weight: 750; letter-spacing: .08em; line-height: 1.45; list-style: none; text-align: right; text-transform: uppercase; }
 .project-card__roles li { max-width: 100%; overflow-wrap: anywhere; }
-.project-card h3 { margin: 1rem 0 .5rem; font: 600 2rem var(--display); }
+.project-card h3 { margin: 1rem 0 .5rem; overflow-wrap: anywhere; font: 600 2rem var(--display); }
 .project-card > p { color: var(--ink-soft); }
 .project-card > ul { padding-left: 1.15rem; }
 .project-card > ul li::marker { color: var(--leaf); }
