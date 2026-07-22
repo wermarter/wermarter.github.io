@@ -25,21 +25,21 @@ import MermaidDiagram from "../../components/MermaidDiagram.astro";
 <MermaidDiagram
   label="System map"
   caption="The access service owns the workflow; the web and browser applications stay focused on interaction and rendering."
-  chart={`flowchart LR
-    STAFF["Laboratory staff"] --> WEB["React web app"]
-    WEB -->|"HTTPS · OpenAPI"| ACCESS["NestJS access service"]
+  chart={`flowchart TB
+    subgraph ENTRY[" "]
+      direction LR
+      STAFF["Laboratory staff"] --> WEB["React web app"]
+      WEB -->|"HTTPS · OpenAPI"| ACCESS["NestJS access service"]
+    end
 
-    ACCESS --> MONGO[("MongoDB")]
-    ACCESS --> REDIS[("Redis")]
-    ACCESS --> MINIO[("MinIO / S3")]
-    ACCESS -->|"streaming gRPC"| BROWSER["Browser service"]
-    BROWSER --> CHROMIUM["Chromium"]
-    CHROMIUM --> PDF["Merged PDF"]
+    ACCESS --> DATA[("MongoDB · Redis · MinIO")]
+    ACCESS -->|"streaming gRPC"| RENDER["Browser service<br/>Chromium · merged PDF"]
 
     classDef primary fill:#f8f8f1,stroke:#3f6b48,stroke-width:2px,color:#27312b
     classDef data fill:#dfe4d4,stroke:#7b5b45,color:#27312b
-    class STAFF,WEB,ACCESS,BROWSER,CHROMIUM,PDF primary
-    class MONGO,REDIS,MINIO data`}
+    class STAFF,WEB,ACCESS,RENDER primary
+    class DATA data
+    style ENTRY fill:transparent,stroke:transparent`}
 />
 
 The Bun monorepo shares four libraries: `@diut/hcdc` for domain entities and authorization, `@diut/services` for gRPC contracts, `@diut/nestjs-infra` for reusable adapters, and `@diut/common` for small shared types.
@@ -49,17 +49,27 @@ The Bun monorepo shares four libraries: `@diut/hcdc` for domain entities and aut
 <MermaidDiagram
   label="Request path"
   caption="Transport details stop at the controller; business rules stay in use cases; NestJS tokens connect domain interfaces to adapters."
-  chart={`flowchart LR
-    HTTP["HTTP controller"] --> USECASE["Use case"]
-    USECASE --> RULES["Validation + ABAC"]
-    RULES --> PORT{{"Domain interface"}}
-    PORT -. "dependency token" .-> ADAPTER["Infrastructure adapter"]
-    ADAPTER --> STORE[("MongoDB · Redis · S3")]
+  chart={`flowchart TB
+    subgraph DECISIONS[" "]
+      direction LR
+      HTTP["HTTP controller"] --> USECASE["Use case"]
+      USECASE --> RULES["Validation + ABAC"]
+    end
+
+    subgraph IMPLEMENTATION[" "]
+      direction LR
+      PORT{{"Domain interface"}} -. "dependency token" .-> ADAPTER["Infrastructure adapter"]
+      ADAPTER --> STORE[("MongoDB · Redis · S3")]
+    end
+
+    RULES --> PORT
 
     classDef core fill:#f8f8f1,stroke:#3f6b48,stroke-width:2px,color:#27312b
     classDef seam fill:#dfe4d4,stroke:#7b5b45,stroke-width:2px,color:#27312b
     class HTTP,USECASE,RULES,ADAPTER core
-    class PORT,STORE seam`}
+    class PORT,STORE seam
+    style DECISIONS fill:transparent,stroke:transparent
+    style IMPLEMENTATION fill:transparent,stroke:transparent`}
 />
 
 The access service is arranged as `controller`, `app`, `domain`, and `infra`. Shared CASL rules express permissions against users, branches, record state, and domain fields. The React client uses the same authorization vocabulary, while the server remains authoritative.

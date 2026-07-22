@@ -9,9 +9,42 @@ const { chart, label, caption } = Astro.props;
 ---
 
 <figure class="architecture-figure">
-  <div class="architecture-figure__label">{label}</div>
-  <div class="architecture-figure__canvas">
-    <pre class="mermaid" role="img" aria-label={caption}>{chart}</pre>
+  <div class="architecture-figure__toolbar">
+    <div class="architecture-figure__label">{label}</div>
+    <div class="architecture-figure__tools" aria-label={`${label} diagram controls`}>
+      <span class="architecture-figure__hint">Drag to pan</span>
+      <button type="button" data-diagram-action="out" aria-label={`Zoom out ${label}`} title="Zoom out">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="M8 11h6"></path>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+      <button type="button" data-diagram-action="fit" aria-label={`Fit ${label} to its viewport`} title="Fit diagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
+          <path d="M16 3h3a2 2 0 0 1 2 2v3"></path>
+          <path d="M8 21H5a2 2 0 0 1-2-2v-3"></path>
+          <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
+        </svg>
+      </button>
+      <button type="button" data-diagram-action="in" aria-label={`Zoom in ${label}`} title="Zoom in">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="M11 8v6"></path>
+          <path d="M8 11h6"></path>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div
+    class="architecture-figure__canvas"
+    data-diagram-viewport
+    tabindex="0"
+    aria-label={`${caption} Use the controls to zoom, or drag to pan the diagram.`}
+  >
+    <pre class="mermaid" data-diagram-stage role="img" aria-label={caption}>{chart}</pre>
   </div>
   <figcaption>{caption}</figcaption>
 </figure>
@@ -63,12 +96,100 @@ const { chart, label, caption } = Astro.props;
 
     const diagrams = document.querySelectorAll<HTMLElement>(".mermaid:not([data-processed])");
 
+    function makeInteractive(diagram: HTMLElement) {
+      const figure = diagram.closest<HTMLElement>(".architecture-figure");
+      const viewport = figure?.querySelector<HTMLElement>("[data-diagram-viewport]");
+      if (!figure || !viewport || figure.dataset.controlsReady === "true") return;
+
+      figure.dataset.controlsReady = "true";
+      const zoomOut = figure.querySelector<HTMLButtonElement>("[data-diagram-action='out']");
+      const fit = figure.querySelector<HTMLButtonElement>("[data-diagram-action='fit']");
+      const zoomIn = figure.querySelector<HTMLButtonElement>("[data-diagram-action='in']");
+      const minimumScale = 0.6;
+      const maximumScale = 3;
+      let scale = 1;
+      let offsetX = 0;
+      let offsetY = 0;
+      let activePointer: number | null = null;
+      let startX = 0;
+      let startY = 0;
+      let startingOffsetX = 0;
+      let startingOffsetY = 0;
+
+      function update() {
+        diagram.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scale})`;
+        figure.dataset.zoomed = scale === 1 ? "false" : "true";
+        if (zoomOut) zoomOut.disabled = scale <= minimumScale;
+        if (zoomIn) zoomIn.disabled = scale >= maximumScale;
+      }
+
+      function setScale(nextScale: number) {
+        scale = Math.min(maximumScale, Math.max(minimumScale, nextScale));
+        update();
+      }
+
+      function reset() {
+        scale = 1;
+        offsetX = 0;
+        offsetY = 0;
+        update();
+      }
+
+      zoomOut?.addEventListener("click", () => setScale(scale - 0.25));
+      zoomIn?.addEventListener("click", () => setScale(scale + 0.25));
+      fit?.addEventListener("click", reset);
+
+      viewport.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0) return;
+        activePointer = event.pointerId;
+        startX = event.clientX;
+        startY = event.clientY;
+        startingOffsetX = offsetX;
+        startingOffsetY = offsetY;
+        viewport.setPointerCapture(event.pointerId);
+        viewport.dataset.dragging = "true";
+      });
+
+      viewport.addEventListener("pointermove", (event) => {
+        if (activePointer !== event.pointerId) return;
+        offsetX = startingOffsetX + event.clientX - startX;
+        offsetY = startingOffsetY + event.clientY - startY;
+        update();
+      });
+
+      function stopDragging(event: PointerEvent) {
+        if (activePointer !== event.pointerId) return;
+        activePointer = null;
+        viewport.dataset.dragging = "false";
+      }
+
+      viewport.addEventListener("pointerup", stopDragging);
+      viewport.addEventListener("pointercancel", stopDragging);
+      viewport.addEventListener("keydown", (event) => {
+        const panStep = 24;
+        if (event.key === "+" || event.key === "=") setScale(scale + 0.25);
+        else if (event.key === "-") setScale(scale - 0.25);
+        else if (event.key === "0") reset();
+        else if (event.key === "ArrowLeft") offsetX -= panStep;
+        else if (event.key === "ArrowRight") offsetX += panStep;
+        else if (event.key === "ArrowUp") offsetY -= panStep;
+        else if (event.key === "ArrowDown") offsetY += panStep;
+        else return;
+
+        event.preventDefault();
+        update();
+      });
+
+      update();
+    }
+
     for (const [index, diagram] of diagrams.entries()) {
       const source = diagram.textContent ?? "";
       const { svg, bindFunctions } = await mermaid.render(`diut-architecture-${index}`, source);
       diagram.innerHTML = svg;
       diagram.dataset.processed = "true";
       bindFunctions?.(diagram);
+      makeInteractive(diagram);
     }
   }
 </script>
@@ -83,15 +204,21 @@ const { chart, label, caption } = Astro.props;
     overflow: hidden;
     border: 1px solid var(--line);
     box-sizing: border-box;
-    background:
-      linear-gradient(90deg, transparent 0 2.9rem, var(--bark-wash) 2.9rem 3rem, transparent 3rem),
-      var(--paper-raised);
+    background: var(--paper-raised);
     box-shadow: 0 18px 45px var(--shadow);
   }
 
-  .architecture-figure__label {
-    padding: .72rem 1rem .65rem 4rem;
+  .architecture-figure__toolbar {
+    display: flex;
+    min-height: 2.9rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .45rem .55rem .45rem 1rem;
     border-bottom: 1px solid var(--line);
+  }
+
+  .architecture-figure__label {
     color: var(--leaf);
     font-size: .74rem;
     font-weight: 700;
@@ -99,48 +226,123 @@ const { chart, label, caption } = Astro.props;
     text-transform: uppercase;
   }
 
+  .architecture-figure__tools {
+    display: none;
+    align-items: center;
+    gap: .35rem;
+  }
+
+  :global(.js) .architecture-figure__tools {
+    display: flex;
+  }
+
+  .architecture-figure__hint {
+    margin-right: .2rem;
+    color: var(--ink-soft);
+    font-size: .76rem;
+  }
+
+  .architecture-figure__tools button {
+    display: grid;
+    min-width: 2.15rem;
+    height: 2rem;
+    padding: 0 .55rem;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: var(--paper);
+    color: var(--ink);
+    font: 700 .78rem var(--body);
+    cursor: pointer;
+  }
+
+  .architecture-figure__tools button:hover {
+    border-color: var(--leaf);
+    color: var(--leaf);
+  }
+
+  .architecture-figure__tools button:focus-visible,
+  .architecture-figure__canvas:focus-visible {
+    outline: 2px solid var(--leaf-bright);
+    outline-offset: 2px;
+  }
+
+  .architecture-figure__tools button:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+  }
+
+  .architecture-figure__tools svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
   .architecture-figure__canvas {
     width: 100%;
+    height: clamp(22rem, 56vw, 30rem);
     max-width: 100%;
-    overflow-x: auto;
-    padding: clamp(1.25rem, 4vw, 2.5rem);
+    overflow: hidden;
     box-sizing: border-box;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .architecture-figure__canvas[data-dragging="true"] {
+    cursor: grabbing;
   }
 
   .mermaid {
-    display: grid;
-    min-width: 40rem;
+    display: flex;
+    width: 100%;
+    height: 100%;
     margin: 0;
-    padding: 0;
-    place-items: center;
+    padding: clamp(.8rem, 2vw, 1.5rem);
+    align-items: center;
+    justify-content: center;
     overflow: visible;
     border: 0;
+    box-sizing: border-box;
     background: transparent;
     font-family: var(--body);
+    transform-origin: center;
+    transition: transform 160ms var(--ease-out);
+    will-change: transform;
+  }
+
+  .architecture-figure__canvas[data-dragging="true"] .mermaid {
+    transition: none;
   }
 
   .mermaid :global(svg) {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
+    width: auto !important;
+    max-width: none !important;
+    height: 100% !important;
+    flex: none;
   }
 
   figcaption {
     max-width: 68ch;
-    padding: .85rem 1rem .95rem 4rem;
+    padding: .85rem 1rem .95rem;
     border-top: 1px solid var(--line);
     color: var(--ink-soft);
     font-size: .92rem;
   }
 
-  @media (max-width: 640px) {
-    .architecture-figure__label,
-    figcaption {
-      padding-left: 1rem;
+  @media (max-width: 480px) {
+    .architecture-figure__hint {
+      display: none;
     }
+  }
 
+  @media (prefers-reduced-motion: reduce) {
     .mermaid {
-      min-width: 34rem;
+      transition: none;
     }
   }
 </style>
