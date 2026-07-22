@@ -26,7 +26,12 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
             </div>
             <span class="role__duration">{getDuration(role)}</span>
           </div>
-          <span class="timeline__marker" aria-hidden="true"></span>
+          <span class="timeline__marker" aria-hidden="true">
+            <svg class="timeline__leaf" viewBox="0 0 36 26" focusable="false">
+              <path class="timeline__leaf-shape" d="M18 23C17 13 11 5 2 4C1 13 7 22 18 23Z" />
+              <path class="timeline__leaf-vein" d="M4 7C9 10 14 15 18 23" />
+            </svg>
+          </span>
           <article class="role">
             <p class="role__company">{role.company}</p>
             <h2>{role.title}</h2>
