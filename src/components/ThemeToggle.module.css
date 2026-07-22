@@ -2,7 +2,7 @@
   justify-self: end;
   display: grid;
   place-items: center;
-  width: 2.25rem;
+  width: 2rem;
   aspect-ratio: 1;
   padding: 0;
   border: 1.5px solid var(--line);
@@ -21,7 +21,7 @@
 }
 
 .icon {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   line-height: 1;
   transform: translateY(-.02em);
 }
