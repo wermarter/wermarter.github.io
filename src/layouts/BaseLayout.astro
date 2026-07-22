@@ -36,6 +36,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
     <title>{pageTitle}</title>
+    <script type="speculationrules" is:inline>
+      {
+        "prefetch": [
+          {
+            "where": { "href_matches": "/*" },
+            "eagerness": "moderate"
+          }
+        ]
+      }
+    </script>
     <script is:inline>
       document.documentElement.classList.add("js");
       const savedTheme = localStorage.getItem("theme");
@@ -50,6 +60,32 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <Footer />
     </div>
     <script>
+      if (!HTMLScriptElement.supports?.("speculationrules")) {
+        const prefetchedPages = new Set<string>();
+        const prefetchPage = (target: EventTarget | null) => {
+          if (!(target instanceof Element)) return;
+
+          const anchor = target.closest<HTMLAnchorElement>("a[href]");
+          if (!anchor) return;
+
+          const url = new URL(anchor.href);
+          if (url.origin !== window.location.origin) return;
+          if (url.pathname === window.location.pathname && url.search === window.location.search) return;
+
+          url.hash = "";
+          if (prefetchedPages.has(url.href)) return;
+
+          const hint = document.createElement("link");
+          hint.rel = "prefetch";
+          hint.href = url.href;
+          document.head.append(hint);
+          prefetchedPages.add(url.href);
+        };
+
+        document.addEventListener("pointerover", (event) => prefetchPage(event.target), { passive: true });
+        document.addEventListener("focusin", (event) => prefetchPage(event.target));
+      }
+
       const revealItems = document.querySelectorAll<HTMLElement>(
         ".section-heading, .content-row, .skill, .role, .empty-note, .contact-note > *, .prose > *, [data-reveal]",
       );
