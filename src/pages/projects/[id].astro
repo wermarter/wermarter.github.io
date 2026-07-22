@@ -1,0 +1,107 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogCard from "../../components/BlogCard.astro";
+import { allProjects, experience, type Project } from "../../data/personal";
+import { formatMonthYear, formatPeriod, getDuration, toYearMonth } from "../../utils/calendar";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+    (left, right) => right.data.publishedAt.valueOf() - left.data.publishedAt.valueOf(),
+  );
+
+  return allProjects.map((project) => ({
+    params: { id: project.id },
+    props: {
+      project,
+      company: experience.find((role) => role.projects.some(({ id }) => id === project.id))?.company,
+      relatedPosts: posts.filter((post) =>
+        post.data.tags.some((tag) => tag.type === "project" && tag.value === project.id),
+      ),
+    },
+  }));
+}
+
+interface Props {
+  project: Project;
+  company?: string;
+  relatedPosts: CollectionEntry<"blog">[];
+}
+
+const { project, company, relatedPosts } = Astro.props;
+const isOngoing = project.endMonth === null || project.endYear === null;
+---
+
+<BaseLayout title={project.name} description={`${project.description} Explore the work, outcomes, technology, and related field notes.`}>
+  <article class="project-detail">
+    <header class="project-detail__hero">
+      <span class="project-detail__watermark" aria-hidden="true">{project.id}</span>
+      <div class="project-detail__intro">
+        <a class="back-link" href="/projects/">← All projects</a>
+        <p class="eyebrow">{company ?? "Independent work"}</p>
+        <h1>{project.name}</h1>
+        <p class="project-detail__lede">{project.description}</p>
+        {project.url && <a class="button project-detail__external" href={project.url}>Open project <span aria-hidden="true">↗</span></a>}
+      </div>
+
+      <dl class="project-facts" aria-label="Project facts" data-reveal>
+        <div class="project-facts__period">
+          <dt>Field period</dt>
+          <dd aria-label={`${formatPeriod(project)}, ${getDuration(project)}`}>
+            <time datetime={toYearMonth(project.startMonth, project.startYear)}>{formatMonthYear(project.startMonth, project.startYear)}</time>
+            <span aria-hidden="true">→</span>
+            {project.endMonth && project.endYear
+              ? <time datetime={toYearMonth(project.endMonth, project.endYear)}>{formatMonthYear(project.endMonth, project.endYear)}</time>
+              : <strong>Present</strong>}
+          </dd>
+          <p>{getDuration(project)} · {isOngoing ? "Ongoing" : "Completed"}</p>
+        </div>
+        <div>
+          <dt>{project.roles.length === 1 ? "Role" : "Roles"}</dt>
+          <dd>{project.roles.join(" · ")}</dd>
+        </div>
+        {project.team && <div><dt>Team</dt><dd>{project.team}</dd></div>}
+      </dl>
+    </header>
+
+    <section class="project-detail__work" aria-labelledby="outcomes-title">
+      <div class="project-outcomes">
+        <div class="project-detail__section-heading" data-reveal>
+          <p class="eyebrow">What changed</p>
+          <h2 id="outcomes-title">The work, in outcomes.</h2>
+        </div>
+        <ul class="outcome-list">
+          {project.achievements.map((achievement) => (
+            <li data-reveal><span aria-hidden="true"></span><p>{achievement}</p></li>
+          ))}
+        </ul>
+      </div>
+
+      <aside class="project-toolkit" aria-labelledby="toolkit-title" data-reveal>
+        <p class="eyebrow">Working set</p>
+        <h2 id="toolkit-title">Tools & technology</h2>
+        <div class="tag-list">
+          {project.technologies.map((technology) => (
+            <a href={`/projects/?skill=${encodeURIComponent(technology)}`}>{technology}</a>
+          ))}
+        </div>
+        <p>Each tool links back to the wider work index, where you can trace it across projects and field notes.</p>
+      </aside>
+    </section>
+
+    <section class="project-detail__notes" aria-labelledby="related-notes-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Written context</p>
+          <h2 id="related-notes-title">Related field notes</h2>
+        </div>
+        <p>{relatedPosts.length > 0
+          ? "Notes written from this project: the decisions, trade-offs, and lessons behind the work."
+          : "This project does not have a published field note yet. The project page will collect them here as they grow."}</p>
+      </div>
+      {relatedPosts.length > 0
+        ? <div class="blog-list">{relatedPosts.map((post) => <BlogCard post={post} />)}</div>
+        : <div class="empty-note" data-reveal><p class="eyebrow">Nothing published yet</p><h2>The field book is still open.</h2><p>For now, the outcomes and technology above are the complete project record.</p></div>}
+    </section>
+  </article>
+</BaseLayout>
