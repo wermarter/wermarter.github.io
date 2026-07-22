@@ -34,6 +34,7 @@ export interface Project extends CalendarPeriod {
 }
 
 export interface Experience extends CalendarPeriod {
+  id: string;
   company: string;
   title: string;
   summary: string[];
@@ -68,6 +69,7 @@ export const education = [
 
 const experienceData: Experience[] = [
   {
+    id: "gbg-senior-backend-developer",
     company: "GBG Group Services",
     title: "Senior Backend Developer",
     startMonth: 6,
@@ -119,6 +121,7 @@ const experienceData: Experience[] = [
     ],
   },
   {
+    id: "nexon-mid-level-backend-developer",
     company: "NEXON DEV VINA",
     title: "Mid-level Backend Developer",
     startMonth: 2,
@@ -169,6 +172,7 @@ const experienceData: Experience[] = [
     ],
   },
   {
+    id: "nexon-junior-backend-developer",
     company: "NEXON DEV VINA",
     title: "Junior Backend Developer",
     startMonth: 4,
@@ -221,6 +225,7 @@ const experienceData: Experience[] = [
     ],
   },
   {
+    id: "hcdc-full-stack-developer",
     company: "HCMC Center for Disease Control",
     title: "Full Stack Developer",
     startMonth: 9,
@@ -281,6 +286,7 @@ const experienceData: Experience[] = [
     ],
   },
   {
+    id: "younet-web-intern",
     company: "Younet Media",
     title: "Web Intern",
     startMonth: 5,
@@ -331,7 +337,7 @@ export const experience: Experience[] = experienceData.map((item) => ({
 }));
 export const personalProjects: Project[] = personalProjectData.map(orderProjectSkills);
 export const allProjects = [...personalProjects, ...experience.flatMap((item) => item.projects)];
-export const coreSkills = selectCoreSkills(skillUsage, 3);
+export const coreSkills = selectCoreSkills(skillUsage, 4);
 export const featuredProjects = allProjects.filter((project) => project.featured);
 
 export const publicProfileData = {

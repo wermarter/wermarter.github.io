@@ -3,17 +3,15 @@ interface Props { class?: string; label?: string; }
 const { class: className = "", label = "" } = Astro.props;
 ---
 
-<svg class:list={["botanical-sketch", className]} viewBox="0 0 320 280" role={label ? "img" : "presentation"} aria-label={label || undefined} aria-hidden={label ? undefined : "true"}>
+<svg class:list={["botanical-sketch", className]} viewBox="0 0 320 220" role={label ? "img" : "presentation"} aria-label={label || undefined} aria-hidden={label ? undefined : "true"}>
   <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-    <path class="branch stem" d="M156 270c4-54-8-104 9-151 11-31 36-58 62-80" />
-    <path class="branch echo" d="M160 270c2-53-5-100 11-148 11-30 34-57 59-78" />
-    <path class="leaf leaf--1" d="M170 120c-35-2-62-20-73-49 36-1 62 18 73 49Z" />
-    <path class="leaf leaf--2" d="M188 84c4-31 22-55 50-67 2 32-18 57-50 67Z" />
-    <path class="leaf leaf--3" d="M157 166c-31 3-56-9-72-35 31-4 57 8 72 35Z" />
-    <path class="leaf leaf--4" d="M172 137c26-7 49 1 66 23-27 8-50 0-66-23Z" />
-    <path class="leaf leaf--5" d="M156 211c-28 6-51-2-68-23 28-7 52 1 68 23Z" />
-    <path class="leaf leaf--6" d="M155 237c19-8 37-5 52 10-20 9-38 5-52-10Z" />
-    <path class="veins" d="M123 99c13-2 28 5 41 20M214 52c-9 7-18 18-25 32M107 143c17 2 34 10 49 23M218 153c-14-4-30-2-46 8" />
-    <path class="pot" d="M114 249h91l-10 27h-70l-11-27Z" />
+    <path class="branch stem" d="M156 208c3-41-6-78 7-113 9-25 29-46 50-63" />
+    <path class="branch echo" d="M160 208c1-40-4-75 9-110 9-24 27-44 47-61" />
+    <path class="leaf leaf--1" d="M165 103c-29-1-52-16-62-40 30-1 52 15 62 40Z" />
+    <path class="leaf leaf--2" d="M182 75c3-25 19-45 43-54 1 26-16 46-43 54Z" />
+    <path class="leaf leaf--3" d="M157 143c-27 3-49-8-62-30 27-4 49 7 62 30Z" />
+    <path class="leaf leaf--4" d="M169 122c23-6 43 1 57 20-23 7-43 0-57-20Z" />
+    <path class="veins" d="M125 87c11-2 24 5 35 15M204 49c-8 6-15 15-21 26M114 123c14 2 29 8 42 19M209 136c-12-3-25-1-39 6" />
+    <path class="pot" d="M117 189h80l-9 26h-61l-10-26Z" />
   </g>
 </svg>

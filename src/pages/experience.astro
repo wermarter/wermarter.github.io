@@ -11,7 +11,7 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
   <section class="content-section">
     <ol class="timeline" aria-label="Career timeline">
       {experience.map((role) => (
-        <li class="timeline__item">
+        <li class="timeline__item" id={role.id}>
           <div class="role__when" aria-label={`${formatPeriod(role)}, ${getDuration(role)}`}>
             <div class="role__date">
               <span>From</span>

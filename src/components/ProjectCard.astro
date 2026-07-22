@@ -14,20 +14,22 @@ const { project } = Astro.props;
   data-skills={JSON.stringify(project.technologies)}
   data-topics="[]"
 >
-  <div class="project-card__topline">
-    <div class="project-card__period" aria-label={`${formatPeriod(project)}, ${getDuration(project)}`}>
-      <time datetime={toYearMonth(project.startMonth, project.startYear)}>{formatMonthYear(project.startMonth, project.startYear)}</time>
-      <span class="project-card__arrow" aria-hidden="true">→</span>
-      {project.endMonth && project.endYear
-        ? <time datetime={toYearMonth(project.endMonth, project.endYear)}>{formatMonthYear(project.endMonth, project.endYear)}</time>
-        : <span class="project-card__present">Present</span>}
-      <span class="project-card__duration">{getDuration(project)}</span>
+  <header class="project-card__header">
+    <div class="project-card__identity">
+      <div class="project-card__period" aria-label={`${formatPeriod(project)}, ${getDuration(project)}`}>
+        <time datetime={toYearMonth(project.startMonth, project.startYear)}>{formatMonthYear(project.startMonth, project.startYear)}</time>
+        <span class="project-card__arrow" aria-hidden="true">→</span>
+        {project.endMonth && project.endYear
+          ? <time datetime={toYearMonth(project.endMonth, project.endYear)}>{formatMonthYear(project.endMonth, project.endYear)}</time>
+          : <span class="project-card__present">Present</span>}
+        <span class="project-card__duration">{getDuration(project)}</span>
+      </div>
+      <h3><a class="project-card__link" href={`/projects/${project.id}/`}>{project.name}</a></h3>
     </div>
     <ul class="project-card__roles" aria-label="Project roles">
       {project.roles.map((role) => <li>{role}</li>)}
     </ul>
-  </div>
-  <h3><a class="project-card__link" href={`/projects/${project.id}/`}>{project.name}</a></h3>
+  </header>
   <p>{project.description}</p>
   <ul>
     {project.achievements.slice(0, 3).map((achievement) => <li>{achievement}</li>)}
