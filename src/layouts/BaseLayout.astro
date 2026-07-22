@@ -51,7 +51,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </div>
     <script>
       const revealItems = document.querySelectorAll<HTMLElement>(
-        ".section-heading, .experience-row, .skill, .role, .blog-card, .empty-note, .contact-note > *, .prose > *, [data-reveal]",
+        ".section-heading, .content-row, .skill, .role, .empty-note, .contact-note > *, .prose > *, [data-reveal]",
       );
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

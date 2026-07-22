@@ -1,0 +1,146 @@
+---
+interface Props {
+  chart: string;
+  label: string;
+  caption: string;
+}
+
+const { chart, label, caption } = Astro.props;
+---
+
+<figure class="architecture-figure">
+  <div class="architecture-figure__label">{label}</div>
+  <div class="architecture-figure__canvas">
+    <pre class="mermaid" role="img" aria-label={caption}>{chart}</pre>
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>
+
+<script>
+  import mermaid from "mermaid";
+
+  const page = window as typeof window & { mermaidRenderStarted?: boolean };
+
+  if (!page.mermaidRenderStarted) {
+    page.mermaidRenderStarted = true;
+
+    const rootStyles = getComputedStyle(document.documentElement);
+    const color = (name: string) => rootStyles.getPropertyValue(name).trim();
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "base",
+      fontFamily: color("--font-body"),
+      flowchart: { curve: "basis", htmlLabels: true },
+      sequence: { mirrorActors: false, messageMargin: 32 },
+      themeVariables: {
+        background: color("--paper"),
+        primaryColor: color("--paper-raised"),
+        primaryTextColor: color("--ink"),
+        primaryBorderColor: color("--leaf"),
+        secondaryColor: color("--paper-deep"),
+        secondaryTextColor: color("--ink"),
+        secondaryBorderColor: color("--bark"),
+        tertiaryColor: color("--bark-wash"),
+        tertiaryTextColor: color("--ink"),
+        tertiaryBorderColor: color("--graphite"),
+        lineColor: color("--graphite"),
+        textColor: color("--ink"),
+        actorBkg: color("--paper-raised"),
+        actorBorder: color("--leaf"),
+        actorTextColor: color("--ink"),
+        signalColor: color("--graphite"),
+        signalTextColor: color("--ink"),
+        labelBoxBkgColor: color("--paper-deep"),
+        labelBoxBorderColor: color("--bark"),
+        labelTextColor: color("--ink"),
+        noteBkgColor: color("--paper-deep"),
+        noteBorderColor: color("--bark"),
+        noteTextColor: color("--ink"),
+      },
+    });
+
+    const diagrams = document.querySelectorAll<HTMLElement>(".mermaid:not([data-processed])");
+
+    for (const [index, diagram] of diagrams.entries()) {
+      const source = diagram.textContent ?? "";
+      const { svg, bindFunctions } = await mermaid.render(`diut-architecture-${index}`, source);
+      diagram.innerHTML = svg;
+      diagram.dataset.processed = "true";
+      bindFunctions?.(diagram);
+    }
+  }
+</script>
+
+<style>
+  .architecture-figure {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin: 2.25rem 0 3rem;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-sizing: border-box;
+    background:
+      linear-gradient(90deg, transparent 0 2.9rem, var(--bark-wash) 2.9rem 3rem, transparent 3rem),
+      var(--paper-raised);
+    box-shadow: 0 18px 45px var(--shadow);
+  }
+
+  .architecture-figure__label {
+    padding: .72rem 1rem .65rem 4rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--leaf);
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .architecture-figure__canvas {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    box-sizing: border-box;
+  }
+
+  .mermaid {
+    display: grid;
+    min-width: 40rem;
+    margin: 0;
+    padding: 0;
+    place-items: center;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    font-family: var(--body);
+  }
+
+  .mermaid :global(svg) {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    max-width: 68ch;
+    padding: .85rem 1rem .95rem 4rem;
+    border-top: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-size: .92rem;
+  }
+
+  @media (max-width: 640px) {
+    .architecture-figure__label,
+    figcaption {
+      padding-left: 1rem;
+    }
+
+    .mermaid {
+      min-width: 34rem;
+    }
+  }
+</style>

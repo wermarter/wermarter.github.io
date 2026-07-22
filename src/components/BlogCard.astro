@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { allProjects } from "../data/personal";
+import ContentRow from "./ContentRow.astro";
 import ReferenceTag from "./ReferenceTag.astro";
 
 interface Props {
@@ -18,79 +19,24 @@ const relatedSkills = [...new Set([...directSkills, ...projectSkills])];
 const topics = post.data.tags.filter((tag) => tag.type === "topic").map((tag) => tag.value);
 ---
 
-<article
+<ContentRow
   class="blog-card"
+  href={`/blog/${post.id}/`}
+  heading={post.data.title}
+  headingLevel="h2"
+  linkLabel={`Read ${post.data.title}`}
   data-reference-item="post"
   data-skills={JSON.stringify(relatedSkills)}
   data-projects={JSON.stringify(projectReferences)}
   data-topics={JSON.stringify(topics)}
 >
-  <time datetime={post.data.publishedAt.toISOString()}>{date.format(post.data.publishedAt)}</time>
-  <div>
-    <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
-    <p>{post.data.description}</p>
-    <div class="tag-list tag-list--references">{post.data.tags.map((tag) => <ReferenceTag reference={tag} />)}</div>
-  </div>
-  <span>open note →</span>
-</article>
+  <time slot="meta" datetime={post.data.publishedAt.toISOString()}>{date.format(post.data.publishedAt)}</time>
+  <p>{post.data.description}</p>
+  <div class="tag-list tag-list--references" data-row-interactive>{post.data.tags.map((tag) => <ReferenceTag reference={tag} />)}</div>
+</ContentRow>
 
 <style>
-  .blog-card {
-    display: grid;
-    grid-template-columns: 150px 1fr auto;
-    align-items: start;
-    gap: 1.5rem;
-    margin-inline: -.9rem;
-    padding: 1.5rem .9rem;
-    border-bottom: 1px solid var(--line);
-    transition: background-color .3s ease, transform .35s var(--ease-out);
-  }
-
-  .blog-card:hover {
-    background: linear-gradient(90deg, var(--bark-wash), transparent);
-    transform: translateX(.35rem);
-  }
-
   time {
-    color: var(--ink-soft);
-    font-size: .9rem;
-  }
-
-  h2 {
-    margin: 0;
-    font: 600 clamp(1.6rem, 2.6vw, 2.2rem) var(--display);
-  }
-
-  h2 a {
-    text-decoration: none;
-  }
-
-  p {
-    max-width: 680px;
-    margin: .5rem 0 0;
-    color: var(--ink-soft);
-  }
-
-  .blog-card > span {
-    color: var(--bark);
-    font: 1.5rem var(--hand);
     white-space: nowrap;
-  }
-
-  @media (max-width: 900px) {
-    .blog-card {
-      grid-template-columns: 120px 1fr;
-    }
-
-    .blog-card > span {
-      display: none;
-    }
-  }
-
-  @media (max-width: 620px) {
-    .blog-card {
-      grid-template-columns: 1fr;
-      gap: .45rem;
-    }
   }
 </style>

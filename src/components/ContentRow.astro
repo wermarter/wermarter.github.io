@@ -1,0 +1,144 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends Omit<HTMLAttributes<"article">, "class"> {
+  href: string;
+  heading: string;
+  headingLevel?: "h2" | "h3";
+  linkLabel?: string;
+  class?: string;
+}
+
+const {
+  href,
+  heading,
+  headingLevel = "h3",
+  linkLabel,
+  class: className,
+  ...attributes
+} = Astro.props;
+const Heading = headingLevel;
+---
+
+<article {...attributes} class:list={["content-row", className]}>
+  <div class="content-row__meta"><slot name="meta" /></div>
+  <div class="content-row__body">
+    <Heading><a class="content-row__link" href={href} aria-label={linkLabel}>{heading}</a></Heading>
+    <slot />
+  </div>
+  <span class="content-row__arrow" aria-hidden="true">↗</span>
+</article>
+
+<style>
+  .content-row {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(170px, .3fr) minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 2rem;
+    margin-inline: 0;
+    padding: 1.5rem .9rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .content-row::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-left: 2px solid var(--bark-soft);
+    background: linear-gradient(90deg, var(--bark-wash), transparent 74%);
+    opacity: 0;
+    pointer-events: none;
+    transform: scaleX(.985);
+    transform-origin: left;
+    transition: opacity .3s ease, transform .35s var(--ease-out);
+  }
+
+  .content-row:hover::before,
+  .content-row:focus-within::before {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .content-row__meta {
+    color: var(--ink-soft);
+    font-size: .88rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .content-row__body {
+    min-width: 0;
+  }
+
+  .content-row__body h2,
+  .content-row__body h3 {
+    margin: 0;
+    font: 600 1.6rem var(--display);
+  }
+
+  .content-row__link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .content-row__link::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+  }
+
+  .content-row__link:focus-visible {
+    outline: none;
+  }
+
+  .content-row__link:focus-visible::after {
+    outline: 2px solid var(--leaf);
+    outline-offset: -2px;
+  }
+
+  .content-row__body :global(p) {
+    max-width: 680px;
+    margin: .35rem 0 0;
+    color: var(--ink-soft);
+  }
+
+  .content-row__arrow {
+    color: var(--bark);
+    font: 1.6rem var(--hand);
+    transition: translate .3s var(--ease-out);
+  }
+
+  .content-row:hover .content-row__arrow,
+  .content-row:focus-within .content-row__arrow {
+    translate: .2rem -.2rem;
+  }
+
+  .content-row :global([data-row-interactive]) {
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (max-width: 900px) {
+    .content-row {
+      grid-template-columns: 130px minmax(0, 1fr) auto;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .content-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: .45rem 1rem;
+    }
+
+    .content-row__meta {
+      grid-column: 1 / -1;
+    }
+
+    .content-row__arrow {
+      align-self: center;
+    }
+  }
+</style>

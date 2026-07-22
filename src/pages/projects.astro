@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogCard from "../components/BlogCard.astro";
+import ContentRowList from "../components/ContentRowList.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { allProjects } from "../data/personal";
 import { Skill } from "../data/skills";
@@ -65,7 +66,7 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
         <p class="eyebrow">Written context</p>
         <h2 id="post-results-title">Field notes <span data-result-count="post">{posts.length}</span></h2>
       </div>
-      <div class="blog-list" data-result-list="post">{posts.map((post) => <BlogCard post={post} />)}</div>
+      <ContentRowList data-result-list="post">{posts.map((post) => <BlogCard post={post} />)}</ContentRowList>
       <p class="filter-empty" data-result-empty="post" hidden={posts.length > 0}>No published notes reference this filter yet.</p>
     </section>
   </section>

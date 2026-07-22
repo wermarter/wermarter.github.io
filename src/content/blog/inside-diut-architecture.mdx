@@ -1,0 +1,122 @@
+---
+title: "Inside DIUT: architecture of an on-premise laboratory platform"
+description: "A visual tour of how DIUT separates laboratory workflows, infrastructure, and document rendering."
+publishedAt: 2026-07-22
+tags:
+  - type: project
+    value: diut
+  - type: skill
+    value: Clean Architecture
+  - type: skill
+    value: NestJS
+  - type: skill
+    value: gRPC
+  - type: skill
+    value: Kubernetes
+draft: false
+---
+
+import MermaidDiagram from "../../components/MermaidDiagram.astro";
+
+[DIUT](/projects/diut/) supports the laboratory path from patient intake to verified results, printing, and reporting. Its architecture keeps those business decisions together while isolating infrastructure that changes or scales for different reasons.
+
+## Three applications, one domain
+
+<MermaidDiagram
+  label="System map"
+  caption="The access service owns the workflow; the web and browser applications stay focused on interaction and rendering."
+  chart={`flowchart LR
+    STAFF["Laboratory staff"] --> WEB["React web app"]
+    WEB -->|"HTTPS · OpenAPI"| ACCESS["NestJS access service"]
+
+    ACCESS --> MONGO[("MongoDB")]
+    ACCESS --> REDIS[("Redis")]
+    ACCESS --> MINIO[("MinIO / S3")]
+    ACCESS -->|"streaming gRPC"| BROWSER["Browser service"]
+    BROWSER --> CHROMIUM["Chromium"]
+    CHROMIUM --> PDF["Merged PDF"]
+
+    classDef primary fill:#f8f8f1,stroke:#3f6b48,stroke-width:2px,color:#27312b
+    classDef data fill:#dfe4d4,stroke:#7b5b45,color:#27312b
+    class STAFF,WEB,ACCESS,BROWSER,CHROMIUM,PDF primary
+    class MONGO,REDIS,MINIO data`}
+/>
+
+The Bun monorepo shares four libraries: `@diut/hcdc` for domain entities and authorization, `@diut/services` for gRPC contracts, `@diut/nestjs-infra` for reusable adapters, and `@diut/common` for small shared types.
+
+## A request crosses explicit seams
+
+<MermaidDiagram
+  label="Request path"
+  caption="Transport details stop at the controller; business rules stay in use cases; NestJS tokens connect domain interfaces to adapters."
+  chart={`flowchart LR
+    HTTP["HTTP controller"] --> USECASE["Use case"]
+    USECASE --> RULES["Validation + ABAC"]
+    RULES --> PORT{{"Domain interface"}}
+    PORT -. "dependency token" .-> ADAPTER["Infrastructure adapter"]
+    ADAPTER --> STORE[("MongoDB · Redis · S3")]
+
+    classDef core fill:#f8f8f1,stroke:#3f6b48,stroke-width:2px,color:#27312b
+    classDef seam fill:#dfe4d4,stroke:#7b5b45,stroke-width:2px,color:#27312b
+    class HTTP,USECASE,RULES,ADAPTER core
+    class PORT,STORE seam`}
+/>
+
+The access service is arranged as `controller`, `app`, `domain`, and `infra`. Shared CASL rules express permissions against users, branches, record state, and domain fields. The React client uses the same authorization vocabulary, while the server remains authoritative.
+
+## Printing earns a separate service
+
+<MermaidDiagram
+  label="Document pipeline"
+  caption="Clinical decisions remain in the access service; Chromium receives only prepared HTML and page settings."
+  chart={`sequenceDiagram
+    actor Staff
+    participant Access as Access service
+    participant Store as MongoDB + MinIO
+    participant Browser as Browser service
+    participant Chrome as Chromium
+
+    Staff->>Access: Print selected results
+    Access->>Access: Authorize and prepare domain data
+    Access->>Store: Load samples, forms, and templates
+    Access->>Access: Render EJS to HTML
+    loop One request per page
+      Access->>Browser: Stream HTML + page settings
+      Browser->>Chrome: Render page
+    end
+    Browser-->>Access: Return merged PDF
+    Access->>Store: Record printed by / printed at
+    Access-->>Staff: Download PDF`}
+/>
+
+The narrow gRPC interface keeps Chromium's weight and failure modes outside the main application. Rendering can scale independently without moving laboratory rules into a second service.
+
+## The deployment mirrors the code
+
+<MermaidDiagram
+  label="On-premise deployment"
+  caption="GitOps, persistent storage, and observability make the four-node on-premise environment reproducible and diagnosable."
+  chart={`flowchart TB
+    ARGO["Argo CD"] --> WEB["Web deployment"]
+    ARGO --> ACCESS["Access deployment"]
+    ARGO --> BROWSER["Browser deployment"]
+
+    GATEWAY["Envoy Gateway"] --> WEB
+    GATEWAY --> ACCESS
+    ACCESS -->|"gRPC"| BROWSER
+
+    ACCESS --> DATA["MongoDB · Redis · MinIO"]
+    LONGHORN["Longhorn"] --> DATA
+
+    WEB -. "telemetry" .-> OTEL["OpenTelemetry"]
+    ACCESS -. "telemetry" .-> OTEL
+    BROWSER -. "telemetry" .-> OTEL
+    OTEL --> OBS["Prometheus · Loki · Tempo · Grafana"]
+
+    classDef app fill:#f8f8f1,stroke:#3f6b48,stroke-width:2px,color:#27312b
+    classDef platform fill:#dfe4d4,stroke:#7b5b45,color:#27312b
+    class WEB,ACCESS,BROWSER app
+    class ARGO,GATEWAY,DATA,LONGHORN,OTEL,OBS platform`}
+/>
+
+DIUT keeps most behavior in one access service and introduces a network seam only for a genuinely different workload. That balance preserves locality in the laboratory workflow while allowing delivery, storage, rendering, and observability to evolve independently.

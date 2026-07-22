@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogCard from "../../components/BlogCard.astro";
+import ContentRowList from "../../components/ContentRowList.astro";
 import { allProjects, experience, type Project } from "../../data/personal";
 import { formatMonthYear, formatPeriod, getDuration, toYearMonth } from "../../utils/calendar";
 
@@ -100,7 +101,7 @@ const isOngoing = project.endMonth === null || project.endYear === null;
           : "This project does not have a published field note yet. The project page will collect them here as they grow."}</p>
       </div>
       {relatedPosts.length > 0
-        ? <div class="blog-list">{relatedPosts.map((post) => <BlogCard post={post} />)}</div>
+        ? <ContentRowList>{relatedPosts.map((post) => <BlogCard post={post} />)}</ContentRowList>
         : <div class="empty-note" data-reveal><p class="eyebrow">Nothing published yet</p><h2>The field book is still open.</h2><p>For now, the outcomes and technology above are the complete project record.</p></div>}
     </section>
   </article>

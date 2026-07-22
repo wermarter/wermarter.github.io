@@ -154,12 +154,6 @@
   gap: 1.25rem;
 }
 
-.blog-list {
-  display: grid;
-  gap: 0;
-  border-top: 1px solid var(--line);
-}
-
 .empty-note {
   max-width: 680px;
   padding: 2.5rem;
