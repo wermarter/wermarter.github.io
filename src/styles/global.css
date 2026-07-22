@@ -115,7 +115,7 @@ img, svg { display: block; max-width: 100%; }
 .hero::after { content: ""; position: absolute; z-index: -1; right: -10%; bottom: -35%; width: min(65vw, 760px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, var(--bark-wash), transparent 66%); pointer-events: none; }
 .hero__copy { position: relative; z-index: 2; max-width: 900px; }
 .eyebrow { display: flex; align-items: center; gap: .7rem; width: fit-content; margin: 0 0 1.3rem; color: var(--bark); font-size: .78rem; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
-.eyebrow::before { content: ""; width: 1.8rem; height: 1px; background: currentColor; box-shadow: 1.35rem -.2rem 0 -0.5px currentColor; transform: rotate(-4deg); transform-origin: right; }
+.eyebrow::before { content: ""; flex: none; width: 2.1rem; height: 1rem; background: linear-gradient(135deg, var(--bark-soft), var(--leaf)); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 16'%3E%3Cpath d='M2 14C3 9 7 6 12 6C12 11 8 14 2 14ZM16 13C18 6 24 2 33 2C32 9 26 13 16 13Z'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 16'%3E%3Cpath d='M2 14C3 9 7 6 12 6C12 11 8 14 2 14ZM16 13C18 6 24 2 33 2C32 9 26 13 16 13Z'/%3E%3C/svg%3E") center / contain no-repeat; transform: rotate(-2deg); }
 .hero h1, .page-intro h1, .blog-post h1 { margin: 0; font-family: var(--display); font-weight: 520; letter-spacing: -.045em; line-height: .96; }
 .hero h1 { max-width: 12ch; font-size: clamp(4rem, 8.6vw, 8.5rem); text-wrap: balance; }
 .hero h1 em { color: var(--leaf); font-family: var(--hand); font-weight: 600; }
