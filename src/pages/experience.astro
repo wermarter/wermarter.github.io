@@ -278,8 +278,8 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
     }
 
     .timeline__item {
-      grid-template-columns: 22px minmax(0, 1fr);
-      gap: 0 1rem;
+      grid-template-columns: 14px minmax(0, 1fr);
+      gap: 0 .625rem;
     }
 
     .timeline__marker {
@@ -289,6 +289,7 @@ const formatIsoDate = (value: string) => new Intl.DateTimeFormat("en", { month: 
 
     .timeline__leaf {
       top: -.35rem;
+      width: calc(var(--timeline-leaf-width) * .78);
     }
 
     .timeline__marker::after {
