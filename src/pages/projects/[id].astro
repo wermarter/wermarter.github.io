@@ -42,7 +42,7 @@ const isOngoing = project.endMonth === null || project.endYear === null;
         <p class="eyebrow">{company ?? "Independent work"}</p>
         <h1>{project.name}</h1>
         <p class="project-detail__lede">{project.description}</p>
-        {project.url && <a class="button project-detail__external" href={project.url}>Open project <span aria-hidden="true">↗</span></a>}
+        {project.url && <a class="button project-detail__external" href={project.url} target="_blank" rel="noopener noreferrer">Open project <span aria-hidden="true">↗</span></a>}
       </div>
 
       <dl class="project-facts" aria-label="Project facts" data-reveal>
