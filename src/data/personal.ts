@@ -1,4 +1,9 @@
-import { countSkillUsage, selectCoreSkills, Skill, sortSkillsByRarity } from "./skills";
+import {
+  countSkillUsage,
+  selectCoreSkills,
+  Skill,
+  sortSkillsByRarity,
+} from "./skills";
 
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
@@ -45,7 +50,8 @@ export const profile = {
   name: "Hà Minh Chiến",
   handle: "wermarter",
   title: "Senior backend developer",
-  tagline: "I build dependable systems and codebases that are easier to understand tomorrow.",
+  tagline:
+    "I build dependable systems and codebases that are easier to understand tomorrow.",
   summary:
     "Software engineer with four years of backend experience, a practical frontend foundation, and a strong interest in distributed systems, observability, and maintainable architecture.",
   location: "District 7, Ho Chi Minh City, Vietnam",
@@ -113,7 +119,14 @@ const experienceData: Experience[] = [
           "Integrated MaxMind minFraud and introduced stale-while-revalidate caching.",
           "Troubleshot and hotfixed production services with AWS CloudWatch.",
         ],
-        technologies: [Skill.Serverless, Skill.AWSLambda, Skill.Fastify, Skill.MySQL, Skill.Redis, Skill.SQS],
+        technologies: [
+          Skill.Serverless,
+          Skill.AWSLambda,
+          Skill.Fastify,
+          Skill.MySQL,
+          Skill.Redis,
+          Skill.SQS,
+        ],
         team: "Around 20 people across several countries",
         url: "https://www.gigsberg.com",
         featured: true,
@@ -123,7 +136,7 @@ const experienceData: Experience[] = [
   {
     id: "nexon-mid-level-backend-developer",
     company: "NEXON DEV VINA",
-    title: "Mid-level Backend Developer",
+    title: "Middle Backend Developer | Team Lead",
     startMonth: 2,
     startYear: 2025,
     endMonth: 5,
@@ -140,15 +153,27 @@ const experienceData: Experience[] = [
         startYear: 2024,
         endMonth: 5,
         endYear: 2025,
-        description: "An observability-focused, event-driven web crawling platform.",
-        roles: [RoleEnum.Developer, RoleEnum.DevOps, RoleEnum.SRE, RoleEnum.Lead],
+        description:
+          "An observability-focused, event-driven web crawling platform.",
+        roles: [
+          RoleEnum.Developer,
+          RoleEnum.DevOps,
+          RoleEnum.SRE,
+          RoleEnum.Lead,
+        ],
         achievements: [
           "Migrated to EKS with cluster autoscaling and RabbitMQ-driven external metrics.",
           "Correlated logs, traces, and metrics with OpenTelemetry, Loki, Tempo, and Prometheus.",
           "Provisioned AWS infrastructure with Terraform and Ansible, then bootstrapped self-managed K3s with Rancher and Helm.",
           "Maintained crawlers for more than 20 sites.",
         ],
-        technologies: [Skill.NestJS, Skill.Kubernetes, Skill.Redis, Skill.RabbitMQ, Skill.Grafana],
+        technologies: [
+          Skill.NestJS,
+          Skill.Kubernetes,
+          Skill.Redis,
+          Skill.RabbitMQ,
+          Skill.Grafana,
+        ],
         team: "8 people, autoscaling to a minimum of 1",
         featured: true,
       },
@@ -159,14 +184,23 @@ const experienceData: Experience[] = [
         startYear: 2025,
         endMonth: 5,
         endYear: 2025,
-        description: "A graphic resource management system built with overseas teams.",
+        description:
+          "A graphic resource management system built with overseas teams.",
         roles: [RoleEnum.BackendDeveloper, RoleEnum.Lead],
         achievements: [
           "Set up a backend monorepo around Clean Architecture.",
           "Reviewed backend work and collaborated on schema design and migrations.",
           "Analyzed frontend issues and coordinated backend tasks.",
         ],
-        technologies: [Skill.NestJS, Skill.KafkaStreams, Skill.MySQL, Skill.OpenSearch, Skill.CloudFront, Skill.React, Skill.Electron],
+        technologies: [
+          Skill.NestJS,
+          Skill.KafkaStreams,
+          Skill.MySQL,
+          Skill.OpenSearch,
+          Skill.CloudFront,
+          Skill.React,
+          Skill.Electron,
+        ],
         team: "8 people: 3 frontend, 3 backend, 2 Electron",
       },
     ],
@@ -190,7 +224,8 @@ const experienceData: Experience[] = [
         startYear: 2023,
         endMonth: 5,
         endYear: 2025,
-        description: "A large-scale distributed crawling system with 800 worker instances.",
+        description:
+          "A large-scale distributed crawling system with 800 worker instances.",
         roles: [RoleEnum.Developer, RoleEnum.DBA, RoleEnum.SRE],
         achievements: [
           "Reduced deployment cost by 60% with fault-tolerant workloads on AWS ECS.",
@@ -201,7 +236,16 @@ const experienceData: Experience[] = [
           "Used Grafana, InfluxDB, and ad-hoc Redis and MySQL queries for on-call troubleshooting.",
           "Maintained crawlers for YouTube, Bilibili, and Steam.",
         ],
-        technologies: [Skill.NodeJS, Skill.Redis, Skill.InfluxDB, Skill.Grafana, Skill.MySQL, Skill.ECSFargate, Skill.CloudWatch, Skill.Snowflake],
+        technologies: [
+          Skill.NodeJS,
+          Skill.Redis,
+          Skill.InfluxDB,
+          Skill.Grafana,
+          Skill.MySQL,
+          Skill.ECSFargate,
+          Skill.CloudWatch,
+          Skill.Snowflake,
+        ],
         team: "5 people, including 2 overseas teammates",
         featured: true,
       },
@@ -212,14 +256,22 @@ const experienceData: Experience[] = [
         startYear: 2023,
         endMonth: 10,
         endYear: 2023,
-        description: "An NLP pipeline for Excel input with analytical charts and graphs.",
+        description:
+          "An NLP pipeline for Excel input with analytical charts and graphs.",
         roles: [RoleEnum.BackendDeveloper],
         achievements: [
           "Implemented the NLP data processing pipeline.",
           "Integrated proprietary OAuth 2.0 authorization code SSO.",
           "Created a containerized local workflow with Docker Compose.",
         ],
-        technologies: [Skill.AWSEC2, Skill.Python, Skill.NestJS, Skill.MongoDB, Skill.RabbitMQ, Skill.Redis],
+        technologies: [
+          Skill.AWSEC2,
+          Skill.Python,
+          Skill.NestJS,
+          Skill.MongoDB,
+          Skill.RabbitMQ,
+          Skill.Redis,
+        ],
         team: "4 people",
       },
     ],
@@ -232,7 +284,9 @@ const experienceData: Experience[] = [
     startYear: 2022,
     endMonth: 3,
     endYear: 2023,
-    summary: ["Worked directly with a laboratory team to turn their sample-testing workflow into a resilient internal platform."],
+    summary: [
+      "Worked directly with a laboratory team to turn their sample-testing workflow into a resilient internal platform.",
+    ],
     projects: [
       {
         id: "diut",
@@ -241,7 +295,8 @@ const experienceData: Experience[] = [
         startYear: 2022,
         endMonth: 3,
         endYear: 2023,
-        description: "A multi-tenant laboratory workflow system delivered as a solo full-stack engagement.",
+        description:
+          "A multi-tenant laboratory workflow system delivered as a solo full-stack engagement.",
         roles: [RoleEnum.SoloFullStackDeveloper],
         achievements: [
           "Deployed a secure, highly available platform onto four empty Ubuntu VMs.",
@@ -293,7 +348,9 @@ const experienceData: Experience[] = [
     startYear: 2022,
     endMonth: 8,
     endYear: 2022,
-    summary: ["Maintained a social-media analytics product and migrated an internal frontend tool from Vue to a React single-page application."],
+    summary: [
+      "Maintained a social-media analytics product and migrated an internal frontend tool from Vue to a React single-page application.",
+    ],
     projects: [],
   },
 ];
@@ -306,7 +363,8 @@ const personalProjectData: Project[] = [
     startYear: 2023,
     endMonth: null,
     endYear: null,
-    description: "A small, highly available K3s environment running on a Proxmox bare-metal laptop cluster.",
+    description:
+      "A small, highly available K3s environment running on a Proxmox bare-metal laptop cluster.",
     roles: [RoleEnum.Owner, RoleEnum.Operator],
     achievements: [
       "Automated a three-node HA K3s cluster with Ansible.",
@@ -321,10 +379,18 @@ const personalProjectData: Project[] = [
 
 export const certifications = [
   { name: "TOEIC", score: "990/990", issuer: "IIG Vietnam", issued: "2023-01" },
-  { name: "IELTS", score: "7.5/9.0", issuer: "IDP Education Ltd", issued: "2017-07" },
+  {
+    name: "IELTS",
+    score: "7.5/9.0",
+    issuer: "IDP Education Ltd",
+    issued: "2017-07",
+  },
 ] as const;
 
-const sourceProjects = [...personalProjectData, ...experienceData.flatMap((item) => item.projects)];
+const sourceProjects = [
+  ...personalProjectData,
+  ...experienceData.flatMap((item) => item.projects),
+];
 const skillUsage = countSkillUsage(sourceProjects);
 const orderProjectSkills = (project: Project): Project => ({
   ...project,
@@ -335,10 +401,16 @@ export const experience: Experience[] = experienceData.map((item) => ({
   ...item,
   projects: item.projects.map(orderProjectSkills),
 }));
-export const personalProjects: Project[] = personalProjectData.map(orderProjectSkills);
-export const allProjects = [...personalProjects, ...experience.flatMap((item) => item.projects)];
+export const personalProjects: Project[] =
+  personalProjectData.map(orderProjectSkills);
+export const allProjects = [
+  ...personalProjects,
+  ...experience.flatMap((item) => item.projects),
+];
 export const coreSkills = selectCoreSkills(skillUsage, 4);
-export const featuredProjects = allProjects.filter((project) => project.featured);
+export const featuredProjects = allProjects.filter(
+  (project) => project.featured,
+);
 
 export const publicProfileData = {
   profile,
