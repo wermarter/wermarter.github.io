@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "npm run check && astro build",
+    "cv:source": "tsx scripts/write-cv-source.ts tmp/cv/cv.tex",
     "preview": "astro preview",
     "check": "astro sync && tsc --noEmit",
     "test": "npm run build && node --test tests/*.test.mjs"
@@ -26,6 +27,8 @@
   "devDependencies": {
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "latex.js": "^0.12.6",
+    "tsx": "^4.23.5",
     "typescript": "^7.0.2"
   },
   "engines": {

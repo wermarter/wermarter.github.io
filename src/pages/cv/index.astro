@@ -1,0 +1,207 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCvArtifacts } from "../../cv/render";
+import { profile } from "../../data/personal";
+import "../../../node_modules/latex.js/dist/fonts/Serif/cmun-serif.css";
+
+const { html, previewStyle, sourceHash } = await getCvArtifacts();
+---
+
+<BaseLayout title="CV" description={`Curriculum vitae for ${profile.name}, ${profile.title}.`}>
+  <header class="page-intro cv-intro">
+    <p class="eyebrow">Curriculum vitae</p>
+    <h1>{profile.name}</h1>
+    <p class="lede">A web preview generated from the same LaTeX source as the downloadable CV.</p>
+    <div class="cv-actions" aria-label="CV downloads">
+      <a class="button" href="/cv/cv.pdf">Download PDF</a>
+      <a class="button button--quiet" href="/cv/cv.tex">View LaTeX source</a>
+    </div>
+  </header>
+
+  <section class="cv-preview" aria-label="Rendered CV preview" data-cv-source-hash={sourceHash}>
+    <article class="cv-document" style={previewStyle} set:html={html} />
+  </section>
+</BaseLayout>
+
+<style>
+  .cv-intro {
+    padding-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .cv-intro h1 {
+    max-width: none;
+  }
+
+  .cv-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-top: 1.4rem;
+  }
+
+  .cv-preview {
+    padding: 0 var(--content-gutter) var(--space-section);
+  }
+
+  .cv-preview :global(.cv-document) {
+    --cv-font-size: 10pt;
+    --cv-font-family: "Computer Modern Serif";
+    --cv-page-width: 8.5in;
+    --cv-page-height: 11in;
+    --cv-padding-top: 1in;
+    --cv-padding-right: 1in;
+    --cv-padding-bottom: 1in;
+    --cv-padding-left: 1in;
+    --cv-parindent: 1.5em;
+    --cv-parskip: 0;
+
+    box-sizing: border-box;
+    width: min(100%, 58rem);
+    max-width: var(--cv-page-width);
+    min-height: min(var(--cv-page-height), 100vw);
+    margin-inline: auto;
+    padding: min(var(--cv-padding-top), 8vw) min(var(--cv-padding-right), 8vw)
+      min(var(--cv-padding-bottom), 8vw) min(var(--cv-padding-left), 8vw);
+    color: #171717;
+    background: #fff;
+    box-shadow: 0 1.2rem 3rem rgb(18 27 21 / 16%);
+    font-family: var(--cv-font-family), "Times New Roman", Times, serif;
+    font-size: var(--cv-font-size);
+    line-height: 1.2;
+    text-align: justify;
+  }
+
+  .cv-preview :global(.cv-document .body) {
+    max-width: none;
+  }
+
+  .cv-preview :global(.cv-document .center) {
+    text-align: center;
+  }
+
+  .cv-preview :global(.cv-document .bf) {
+    font-weight: 700;
+  }
+
+  .cv-preview :global(.cv-document .md) {
+    font-weight: 400;
+  }
+
+  .cv-preview :global(.cv-document .it) {
+    font-style: italic;
+  }
+
+  .cv-preview :global(.cv-document .sc) {
+    font-variant-caps: small-caps;
+  }
+
+  .cv-preview :global(.cv-document .tiny) {
+    font-size: .5em;
+  }
+
+  .cv-preview :global(.cv-document .scriptsize) {
+    font-size: .7em;
+  }
+
+  .cv-preview :global(.cv-document .footnotesize) {
+    font-size: .82em;
+  }
+
+  .cv-preview :global(.cv-document .small) {
+    font-size: .91em;
+  }
+
+  .cv-preview :global(.cv-document .large) {
+    font-size: 1.2em;
+  }
+
+  .cv-preview :global(.cv-document .Large) {
+    font-size: 1.4em;
+  }
+
+  .cv-preview :global(.cv-document .LARGE) {
+    font-size: 1.7em;
+  }
+
+  .cv-preview :global(.cv-document .huge) {
+    font-size: 2em;
+  }
+
+  .cv-preview :global(.cv-document .Huge) {
+    font-size: 2.5em;
+  }
+
+  .cv-preview :global(.cv-document h2) {
+    margin: 1rem 0 .45rem;
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 700;
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  .cv-preview :global(.cv-document p) {
+    margin: var(--cv-parskip) 0 0;
+    text-indent: var(--cv-parindent);
+  }
+
+  .cv-preview :global(.cv-document h2 + p),
+  .cv-preview :global(.cv-document .noindent),
+  .cv-preview :global(.cv-document .continue) {
+    text-indent: 0;
+  }
+
+  .cv-preview :global(.cv-document p:has(.cv-fill)) {
+    display: flex;
+    align-items: baseline;
+    gap: .4rem;
+  }
+
+  .cv-preview :global(.cv-document .cv-fill) {
+    flex: 1;
+    min-width: .75rem;
+  }
+
+  .cv-preview :global(.cv-document .cv-rule) {
+    display: block;
+    width: 100%;
+    margin-top: .35rem;
+    border-bottom: 1px solid #333;
+  }
+
+  .cv-preview :global(.cv-document ul) {
+    margin: .1rem 0 .75rem;
+    padding-left: 1.5rem;
+  }
+
+  .cv-preview :global(.cv-document li) {
+    display: list-item;
+    margin: 0 0 .15rem;
+    padding-left: .15rem;
+    list-style: disc;
+  }
+
+  .cv-preview :global(.cv-document .itemlabel) {
+    display: none;
+  }
+
+  .cv-preview :global(.cv-document li > p:first-of-type) {
+    display: inline;
+  }
+
+  .cv-preview :global(.cv-document a) {
+    color: inherit;
+    text-decoration-color: #666;
+  }
+
+  @media (max-width: 620px) {
+    .cv-preview {
+      padding-inline: 0;
+    }
+
+    .cv-preview :global(.cv-document) {
+      box-shadow: none;
+      font-size: min(var(--cv-font-size), .84rem);
+    }
+  }
+</style>

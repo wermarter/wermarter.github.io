@@ -36,6 +36,14 @@ Professional experience, projects, education, certificates, and contact details 
 
 The JSON response allows cross-origin reads and includes the raw Markdown or MDX body for every post, including drafts. Draft entries have `draft: true` and a `null` public URL; they are excluded from the rendered blog until published.
 
+## Generate the CV
+
+The editable CV template lives at `src/cv/template.tex`; its tokens are populated from the canonical data in `src/data/personal.ts` and `src/data/skills.ts`. Every `npm run build` regenerates both `/cv/cv.tex` and the rendered `/cv/` HTML preview from that template.
+
+Edit only the template or canonical portfolio data—never the generated artifacts. The preview converts the template body and carries its document font size, paper/orientation, geometry, paragraph spacing, and supported font commands into scoped web styles.
+
+`npm run cv:source` writes the same populated source to `tmp/cv/cv.tex`. The GitHub Pages deployment runs that command, compiles it with XeLaTeX, stages the ignored `public/cv/cv.pdf`, and includes the PDF in the static site build. Generated PDFs must remain outside Git history.
+
 ## Publish a note
 
 Add an `.md` or `.mdx` file under `src/content/blog` with this frontmatter:
@@ -62,6 +70,6 @@ Use Markdown by default. Choose MDX only when the note needs an embedded compone
 
 ## Deployment
 
-GitHub Actions checks every push and pull request. Pushes to `main` also build and deploy the static site to GitHub Pages through Astro's official action.
+Pushes to `main` and manual workflow runs generate the CV artifacts, build the site, and deploy the static output to GitHub Pages.
 
 The site is published at `https://wermarter.github.io`. A custom domain can be added later by creating `public/CNAME`, updating `site` in `astro.config.ts`, and configuring DNS.
