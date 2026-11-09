@@ -51,9 +51,9 @@ export const profile = {
   handle: "wermarter",
   title: "Senior backend developer",
   tagline:
-    "I build dependable systems and codebases that are easier to understand tomorrow.",
+    "I build dependable backend systems—from the first queue to production operations.",
   summary:
-    "Software engineer with four years of backend experience, a practical frontend foundation, and a strong interest in distributed systems, observability, and maintainable architecture.",
+    "Senior backend developer building distributed, event-driven systems and the infrastructure that keeps them running. My experience spans ticket marketplaces, large-scale data collection, observability, and end-to-end delivery—from application architecture to production operations.",
   location: "District 7, Ho Chi Minh City, Vietnam",
   birthYear: 2000,
   email: "wermarter@gmail.com",
@@ -154,7 +154,7 @@ const experienceData: Experience[] = [
         endMonth: 5,
         endYear: 2025,
         description:
-          "An observability-focused, event-driven web crawling platform.",
+          "An event-driven crawling platform evolved toward Kubernetes-based deployment, autoscaling, and correlated logs, metrics, and traces.",
         roles: [
           RoleEnum.Developer,
           RoleEnum.DevOps,
@@ -225,7 +225,7 @@ const experienceData: Experience[] = [
         endMonth: 5,
         endYear: 2025,
         description:
-          "A large-scale distributed crawling system with 800 worker instances.",
+          "A distributed crawling platform with 800 worker instances, Redis-backed queues, autoscaled AWS ECS workers, and at-least-once delivery.",
         roles: [RoleEnum.Developer, RoleEnum.DBA, RoleEnum.SRE],
         achievements: [
           "Reduced deployment cost by 60% with fault-tolerant workloads on AWS ECS.",
@@ -364,7 +364,7 @@ const personalProjectData: Project[] = [
     endMonth: null,
     endYear: null,
     description:
-      "A small, highly available K3s environment running on a Proxmox bare-metal laptop cluster.",
+      "A three-node, highly available K3s homelab for practicing infrastructure automation, networking, and cluster operations on a Proxmox laptop cluster.",
     roles: [RoleEnum.Owner, RoleEnum.Operator],
     achievements: [
       "Automated a three-node HA K3s cluster with Ansible.",
