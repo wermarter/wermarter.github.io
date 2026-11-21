@@ -15,50 +15,74 @@ const skills = Object.values(Skill).filter(
   (skill) => postSkills.has(skill) || allProjects.some((project) => project.technologies.includes(skill)),
 );
 const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) => tag.type === "topic").map((tag) => tag.value)))].sort();
+const filterGroups = [
+  { kind: "project", title: "Projects", options: allProjects.map(({ id, name }) => ({ value: id, label: name })) },
+  { kind: "skill", title: "Skills", options: skills.map((skill) => ({ value: skill, label: skill })) },
+  { kind: "topic", title: "Topics", options: topics.map((topic) => ({ value: topic, label: topic })) },
+].filter(({ options }) => options.length > 0);
+const filterTypes = topics.length > 0 ? "skill, project, or topic" : "skill or project";
 ---
 
 <BaseLayout title="Projects" description="Trace the skills behind Hà Minh Chiến’s projects and field notes.">
   <header class="page-intro">
     <p class="eyebrow">A connected work index</p>
     <h1>Trace skill to evidence.</h1>
-    <p class="lede">Choose a skill, project, or topic to find the systems where it was used and the notes that explain the thinking behind it.</p>
+    <p class="lede">Choose a {filterTypes} to find the systems where it was used and the notes that explain the thinking behind it.</p>
   </header>
 
   <section class="content-section reference-browser" data-reference-browser>
-    <form class="reference-filter" aria-label="Filter projects and notes">
-      <label>
-        <span>Skill</span>
-        <select name="skill" data-reference-select="skill">
-          <option value="">All skills</option>
-          {skills.map((skill) => <option value={skill}>{skill}</option>)}
-        </select>
-      </label>
-      <label>
-        <span>Project</span>
-        <select name="project" data-reference-select="project">
-          <option value="">All projects</option>
-          {allProjects.map((project) => <option value={project.id}>{project.name}</option>)}
-        </select>
-      </label>
-      <label>
-        <span>Topic</span>
-        <select name="topic" data-reference-select="topic" disabled={topics.length === 0}>
-          <option value="">{topics.length === 0 ? "No published topics" : "All topics"}</option>
-          {topics.map((topic) => <option value={topic}>{topic}</option>)}
-        </select>
-      </label>
-      <a class="reference-filter__clear" href="/projects/" data-clear-reference>Clear filter</a>
-    </form>
-
-    <p class="reference-summary" aria-live="polite" data-reference-summary>Showing all work.</p>
+    <div class="reference-filter" role="group" aria-labelledby="reference-filter-title" data-reference-filter hidden>
+      <div class="reference-filter__heading">
+        <h2 id="reference-filter-title">Filter work</h2>
+        <p class="reference-summary" role="status">
+          <span data-reference-summary></span><span class="reference-summary__context" data-reference-summary-context></span>
+        </p>
+      </div>
+      <div class="reference-filter__actions">
+        <button class="reference-filter__trigger" type="button" aria-expanded="false" aria-controls="reference-picker" data-reference-trigger>
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8.5" cy="8.5" r="4.75" /><path d="m12 12 4 4" />
+          </svg>
+          <span data-reference-trigger-label>Find a {filterTypes}</span>
+          <svg class="reference-filter__chevron" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6 8 4 4 4-4" />
+          </svg>
+        </button>
+        <button class="reference-filter__clear" type="button" aria-label="Clear filter" data-clear-reference hidden>Clear</button>
+      </div>
+      <div class="reference-picker" id="reference-picker" data-reference-picker hidden>
+        <input
+          type="search"
+          role="combobox"
+          aria-label={`Search by ${filterTypes}`}
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-controls="reference-options"
+          autocomplete="off"
+          placeholder={`Search by ${filterTypes}…`}
+          data-reference-search
+        />
+        <div id="reference-options" class="reference-options" role="listbox" aria-label="Available filters" tabindex="-1" data-reference-options>
+          {filterGroups.map(({ kind, title, options }) => (
+            <div class="reference-options__group" role="group" aria-label={title} data-reference-group>
+              <p aria-hidden="true">{title}</p>
+              {options.map(({ value, label }, index) => (
+                <div id={`reference-${kind}-${index}`} class="reference-option" role="option" aria-selected="false" data-kind={kind} data-value={value}>{label}</div>
+              ))}
+            </div>
+          ))}
+        </div>
+        <p class="reference-picker__empty" role="status" data-reference-no-matches></p>
+      </div>
+    </div>
 
     <section class="reference-results" aria-labelledby="project-results-title">
       <div class="reference-results__heading">
         <p class="eyebrow">Built evidence</p>
         <h2 id="project-results-title">Projects <span data-result-count="project">{allProjects.length}</span></h2>
       </div>
-      <div class="project-grid" data-result-list="project">{allProjects.map((project) => <ProjectCard project={project} />)}</div>
-      <p class="filter-empty" data-result-empty="project" hidden>No projects match this reference.</p>
+      <div class="project-grid" data-result-list="project" hidden={allProjects.length === 0}>{allProjects.map((project) => <ProjectCard project={project} />)}</div>
+      <p class="filter-empty" data-result-empty="project" hidden={allProjects.length > 0}>No matching projects.</p>
     </section>
 
     <section class="reference-results" aria-labelledby="post-results-title">
@@ -66,94 +90,198 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
         <p class="eyebrow">Written context</p>
         <h2 id="post-results-title">Field notes <span data-result-count="post">{posts.length}</span></h2>
       </div>
-      <ContentRowList data-result-list="post">{posts.map((post) => <BlogCard post={post} />)}</ContentRowList>
-      <p class="filter-empty" data-result-empty="post" hidden={posts.length > 0}>No published notes reference this filter yet.</p>
+      <ContentRowList data-result-list="post" hidden={posts.length === 0}>{posts.map((post) => <BlogCard post={post} />)}</ContentRowList>
+      <p class="filter-empty" data-result-empty="post" hidden={posts.length > 0}>No matching field notes.</p>
     </section>
   </section>
 
   <script>
     const browser = document.querySelector<HTMLElement>("[data-reference-browser]");
+    const filter = browser?.querySelector<HTMLElement>("[data-reference-filter]");
+    const trigger = filter?.querySelector<HTMLButtonElement>("[data-reference-trigger]");
+    const triggerLabel = filter?.querySelector<HTMLElement>("[data-reference-trigger-label]");
+    const clear = filter?.querySelector<HTMLButtonElement>("[data-clear-reference]");
+    const summary = filter?.querySelector<HTMLElement>("[data-reference-summary]");
+    const summaryContext = filter?.querySelector<HTMLElement>("[data-reference-summary-context]");
+    const picker = filter?.querySelector<HTMLElement>("[data-reference-picker]");
+    const search = picker?.querySelector<HTMLInputElement>("[data-reference-search]");
+    const listbox = picker?.querySelector<HTMLElement>("[data-reference-options]");
+    const noMatches = picker?.querySelector<HTMLElement>("[data-reference-no-matches]");
 
-    if (browser) {
+    if (browser && filter && trigger && triggerLabel && clear && summary && summaryContext && picker && search && listbox && noMatches) {
       const kinds = ["skill", "project", "topic"] as const;
-      type ReferenceKind = (typeof kinds)[number];
-      const selects = new Map(
-        kinds.map((kind) => [kind, browser.querySelector<HTMLSelectElement>(`[data-reference-select="${kind}"]`)]),
-      );
-      const summary = browser.querySelector<HTMLElement>("[data-reference-summary]");
+      const prompt = triggerLabel.textContent;
+      const groups = [...listbox.querySelectorAll<HTMLElement>("[data-reference-group]")];
+      const options = [...listbox.querySelectorAll<HTMLElement>("[role=option]")].map((element) => ({
+        element,
+        kind: element.dataset.kind as (typeof kinds)[number],
+        value: element.dataset.value!,
+        label: element.textContent.trim(),
+      }));
+      type Reference = (typeof options)[number];
 
-      const getActiveReference = () => {
-        const params = new URLSearchParams(window.location.search);
+      const getReference = ({ searchParams }: URL) => {
         for (const kind of kinds) {
-          const value = params.get(kind);
-          const select = selects.get(kind);
-          if (value && select && [...select.options].some((option) => option.value === value)) return { kind, value };
+          const option = options.find((option) => option.kind === kind && option.value === searchParams.get(kind));
+          if (option) return option;
         }
         return null;
       };
 
-      const applyReference = (reference: { kind: ReferenceKind; value: string } | null) => {
-        const counts = { project: 0, post: 0 };
+      const links = [...browser.querySelectorAll<HTMLAnchorElement>("[data-reference-link]")];
+      const items = [...browser.querySelectorAll<HTMLElement>("[data-reference-item]")];
+      let current: Reference | null = null;
+      let highlighted: Reference | undefined;
+      let matches = options;
 
-        for (const kind of kinds) {
-          const select = selects.get(kind);
-          if (select) select.value = reference?.kind === kind ? reference.value : "";
+      const applyReference = (reference: Reference | null) => {
+        current = reference;
+        triggerLabel.textContent = reference ? `${reference.kind[0].toUpperCase()}${reference.kind.slice(1)}: ${reference.label}` : prompt;
+        trigger.toggleAttribute("data-filter-active", Boolean(reference));
+        if (!reference && document.activeElement === clear) trigger.focus();
+        clear.hidden = !reference;
+
+        for (const link of links) {
+          if (reference && getReference(new URL(link.href)) === reference) link.setAttribute("aria-current", "true");
+          else link.removeAttribute("aria-current");
         }
 
-        browser.querySelectorAll<HTMLAnchorElement>("[data-reference-link]").forEach((link) => {
-          const url = new URL(link.href);
-          const active = Boolean(reference && url.searchParams.get(reference.kind) === reference.value);
-          if (active) link.setAttribute("aria-current", "true");
-          else link.removeAttribute("aria-current");
-        });
-
-        browser.querySelectorAll<HTMLElement>("[data-reference-item]").forEach((item) => {
-          const itemKind = item.dataset.referenceItem as "project" | "post";
+        const counts = { project: 0, post: 0 };
+        for (const item of items) {
           const values = reference ? JSON.parse(item.dataset[`${reference.kind}s`] ?? "[]") as string[] : [];
-          const visible = !reference || values.includes(reference.value);
-          item.hidden = !visible;
-          if (visible) counts[itemKind] += 1;
-        });
+          item.hidden = Boolean(reference && !values.includes(reference.value));
+          if (!item.hidden) counts[item.dataset.referenceItem as keyof typeof counts] += 1;
+        }
 
-        (["project", "post"] as const).forEach((kind) => {
+        for (const kind of ["project", "post"] as const) {
           const count = browser.querySelector<HTMLElement>(`[data-result-count="${kind}"]`);
+          const list = browser.querySelector<HTMLElement>(`[data-result-list="${kind}"]`);
           const empty = browser.querySelector<HTMLElement>(`[data-result-empty="${kind}"]`);
           if (count) count.textContent = String(counts[kind]);
+          if (list) list.hidden = counts[kind] === 0;
           if (empty) empty.hidden = counts[kind] > 0;
-        });
-
-        if (summary) {
-          const activeSelect = reference ? selects.get(reference.kind) : null;
-          const referenceLabel = activeSelect?.selectedOptions[0]?.textContent ?? reference?.value;
-          summary.textContent = reference
-            ? `Showing ${counts.project} ${counts.project === 1 ? "project" : "projects"} and ${counts.post} ${counts.post === 1 ? "note" : "notes"} for ${referenceLabel}.`
-            : `Showing all ${counts.project} projects and ${counts.post} published notes.`;
         }
+
+        summary.textContent = `${counts.project} ${counts.project === 1 ? "project" : "projects"} · ${counts.post} ${counts.post === 1 ? "note" : "notes"}`;
+        summaryContext.textContent = reference ? ` for ${reference.label}` : "";
       };
 
-      const setReference = (reference: { kind: ReferenceKind; value: string } | null) => {
+      const setReference = (reference: Reference | null) => {
         const url = new URL(window.location.href);
         kinds.forEach((kind) => url.searchParams.delete(kind));
         if (reference) url.searchParams.set(reference.kind, reference.value);
-        window.history.pushState({}, "", url);
+        if (url.href !== window.location.href) window.history.pushState({}, "", url);
         applyReference(reference);
       };
 
-      selects.forEach((select, kind) => {
-        select?.addEventListener("change", () => setReference(select.value ? { kind, value: select.value } : null));
+      const highlight = (option?: Reference) => {
+        highlighted?.element.setAttribute("aria-selected", "false");
+        highlighted = option;
+        if (!option) {
+          search.removeAttribute("aria-activedescendant");
+          return;
+        }
+        option.element.setAttribute("aria-selected", "true");
+        search.setAttribute("aria-activedescendant", option.element.id);
+        const row = option.element.getBoundingClientRect();
+        const view = listbox.getBoundingClientRect();
+        if (row.top < view.top) listbox.scrollTop += row.top - view.top;
+        if (row.bottom > view.bottom) listbox.scrollTop += row.bottom - view.bottom;
+      };
+
+      const updateMatches = () => {
+        const query = search.value.trim().toLowerCase();
+        matches = options.filter(({ element, label }) => {
+          element.hidden = !label.toLowerCase().includes(query);
+          return !element.hidden;
+        });
+        groups.forEach((group) => { group.hidden = !group.querySelector("[role=option]:not([hidden])"); });
+        listbox.hidden = matches.length === 0;
+        noMatches.textContent = matches.length ? "" : "No matches. Try a different search.";
+        search.setAttribute("aria-expanded", String(matches.length > 0));
+        listbox.scrollTop = 0;
+        highlight(query ? matches[0] : current ?? undefined);
+      };
+
+      const closePicker = (restoreFocus = false) => {
+        if (restoreFocus) trigger.focus();
+        picker.hidden = true;
+        trigger.setAttribute("aria-expanded", "false");
+        search.setAttribute("aria-expanded", "false");
+        highlight();
+      };
+
+      const choose = (reference: Reference) => {
+        setReference(reference);
+        closePicker(true);
+      };
+
+      trigger.addEventListener("click", () => {
+        if (!picker.hidden) return closePicker(true);
+        picker.hidden = false;
+        trigger.setAttribute("aria-expanded", "true");
+        search.value = "";
+        updateMatches();
+        search.focus();
+      });
+      search.addEventListener("input", updateMatches);
+      search.addEventListener("keydown", (event) => {
+        if (event.isComposing) return;
+        if (event.key === "Enter" && highlighted) {
+          event.preventDefault();
+          choose(highlighted);
+        } else if ((event.key === "ArrowDown" || event.key === "ArrowUp") && matches.length) {
+          event.preventDefault();
+          const index = highlighted ? matches.indexOf(highlighted) : -1;
+          const next = event.key === "ArrowDown" ? index + 1 : index < 0 ? matches.length - 1 : index - 1;
+          highlight(matches[Math.max(0, Math.min(next, matches.length - 1))]);
+        }
+      });
+      picker.addEventListener("click", (event) => {
+        const option = options.find(({ element }) => element === event.target);
+        if (option) choose(option);
+      });
+      filter.addEventListener("keydown", (event) => {
+        if (picker.hidden || event.isComposing) return;
+        if (event.key === "Escape") {
+          event.preventDefault();
+          closePicker(true);
+        } else if (event.key === "Tab") {
+          requestAnimationFrame(() => {
+            if (!picker.hidden && !picker.contains(document.activeElement) && document.activeElement !== trigger) closePicker();
+          });
+        }
+      });
+      document.addEventListener("click", (event) => {
+        if (!picker.hidden && !filter.contains(event.target as Node)) closePicker();
+      });
+      clear.addEventListener("click", () => {
+        closePicker(true);
+        setReference(null);
       });
 
       browser.addEventListener("click", (event) => {
-        const link = (event.target as Element).closest<HTMLAnchorElement>("[data-reference-link], [data-clear-reference]");
-        if (!link || new URL(link.href).pathname !== window.location.pathname) return;
-        event.preventDefault();
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        const link = (event.target as Element).closest<HTMLAnchorElement>("[data-reference-link]");
+        if (!link) return;
         const url = new URL(link.href);
-        const reference = kinds.map((kind) => ({ kind, value: url.searchParams.get(kind) })).find(({ value }) => value);
-        setReference(reference?.value ? { kind: reference.kind, value: reference.value } : null);
+        if (url.origin !== location.origin || url.pathname.replace(/\/$/, "") !== location.pathname.replace(/\/$/, "")) return;
+        const reference = getReference(url);
+        if (!reference || reference === current) {
+          if (reference) event.preventDefault();
+          return;
+        }
+        event.preventDefault();
+        choose(reference);
+        browser.scrollIntoView({ block: "start", behavior: "instant" });
       });
 
-      window.addEventListener("popstate", () => applyReference(getActiveReference()));
-      applyReference(getActiveReference());
+      window.addEventListener("popstate", () => {
+        closePicker(picker.contains(document.activeElement));
+        applyReference(getReference(new URL(location.href)));
+      });
+      applyReference(getReference(new URL(location.href)));
+      filter.hidden = false;
     }
   </script>
 </BaseLayout>
@@ -163,82 +291,214 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
     display: grid;
     gap: clamp(1.75rem, 2.5vw, 2.5rem);
     padding-block: clamp(1.5rem, 2.5vw, 2.25rem);
+    scroll-margin-top: 68px;
+  }
+
+  .reference-browser [hidden] {
+    display: none;
   }
 
   .reference-filter {
-    position: sticky;
-    z-index: 4;
-    top: 84px;
+    --control-line: color-mix(in srgb, var(--ink-soft) 65%, var(--paper));
+    --selected-wash: color-mix(in srgb, var(--leaf) 10%, var(--paper-raised));
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
-    align-items: end;
-    gap: .65rem;
-    padding: .7rem .8rem;
-    border: 1px solid color-mix(in srgb, var(--bark-soft) 55%, var(--line));
-    border-radius: 10px 4px 12px 5px;
-    background: color-mix(in srgb, var(--paper-deep) 94%, transparent);
-    box-shadow:
-      0 1px 0 color-mix(in srgb, var(--paper-raised) 65%, transparent) inset,
-      0 12px 30px color-mix(in srgb, var(--ink) 16%, transparent);
-    backdrop-filter: blur(14px) saturate(.8);
-  }
-
-  .reference-filter label {
-    display: grid;
-    min-width: 0;
-    gap: .2rem;
-  }
-
-  .reference-filter label > span {
-    color: var(--bark);
-    font-size: .68rem;
-    font-weight: 800;
-    letter-spacing: .11em;
-    line-height: 1;
-    text-transform: uppercase;
-  }
-
-  .reference-filter select {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    min-height: 2.55rem;
-    padding: .35rem 2.2rem .35rem .7rem;
-    border: 1px solid var(--line);
-    border-radius: 5px 9px 5px 9px;
-    background: var(--paper);
-    color: var(--ink);
-    font: 600 .9rem var(--body);
-    cursor: pointer;
-  }
-
-  .reference-filter select:hover,
-  .reference-filter select:focus {
-    border-color: var(--bark-soft);
-  }
-
-  .reference-filter select:disabled {
-    opacity: .55;
-    cursor: not-allowed;
-  }
-
-  .reference-filter__clear {
-    display: inline-flex;
+    grid-template-columns: minmax(12rem, .72fr) minmax(0, 1fr);
     align-items: center;
-    justify-content: center;
-    min-height: 2.55rem;
-    padding-inline: .8rem;
-    border: 1px solid transparent;
-    color: var(--bark);
-    font-size: .82rem;
-    font-weight: 700;
-    white-space: nowrap;
+    gap: .65rem clamp(1rem, 3vw, 2rem);
+    padding: .85rem clamp(.85rem, 2.2vw, 1.4rem);
+    border: 1px solid var(--line);
+    border-radius: 12px 5px 12px 5px;
+    background: var(--paper-raised);
+  }
+
+  .reference-filter__heading h2 {
+    margin: 0;
+    font: 620 1.5rem/1.1 var(--display);
   }
 
   .reference-summary {
-    margin: -1.25rem 0 0;
+    margin: .18rem 0 0;
     color: var(--ink-soft);
-    font-size: .92rem;
+    font-size: .88rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .reference-summary__context {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .reference-filter__actions {
+    display: flex;
+    align-items: stretch;
+    gap: .35rem;
+  }
+
+  .reference-filter__trigger,
+  .reference-picker input {
+    min-width: 0;
+    min-height: 44px;
+    padding: .55rem .75rem;
+    border: 1px solid var(--control-line);
+    border-radius: 5px 9px 5px 9px;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .reference-filter__trigger {
+    display: grid;
+    flex: 1;
+    grid-template-columns: 1.15rem minmax(0, 1fr) 1.15rem;
+    align-items: center;
+    gap: .55rem;
+    font-weight: 650;
+    text-align: start;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+
+  .reference-filter__trigger:hover,
+  .reference-filter__trigger[aria-expanded="true"] {
+    border-color: var(--leaf);
+  }
+
+  .reference-filter__trigger[data-filter-active] {
+    border-color: var(--leaf);
+    background: var(--selected-wash);
+    color: var(--leaf);
+  }
+
+  .reference-filter__trigger[aria-expanded="true"] .reference-filter__chevron {
+    transform: rotate(180deg);
+  }
+
+  .reference-filter__clear {
+    min-width: 44px;
+    min-height: 44px;
+    padding: .25rem .5rem;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--bark);
+    font-size: .9rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: .18em;
+    cursor: pointer;
+  }
+
+  .reference-filter__clear:hover {
+    background: var(--bark-wash);
+    color: var(--ink);
+  }
+
+  .reference-filter :is(button, input):focus-visible {
+    outline: 2px solid var(--leaf);
+    outline-offset: 2px;
+  }
+
+  .reference-picker {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .reference-picker input {
+    width: 100%;
+    caret-color: var(--leaf);
+  }
+
+  .reference-picker input::placeholder {
+    color: var(--ink-soft);
+    opacity: 1;
+  }
+
+  .reference-options {
+    max-height: 14rem;
+    margin-top: .5rem;
+    padding-inline-end: .2rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-color: var(--control-line) var(--paper-raised);
+  }
+
+  .reference-options__group + .reference-options__group {
+    margin-top: .35rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .reference-options__group p {
+    margin: 0;
+    padding: .4rem .75rem .1rem;
+    color: var(--bark);
+    font-size: .8rem;
+    font-weight: 750;
+  }
+
+  .reference-option {
+    display: grid;
+    align-items: center;
+    min-height: 44px;
+    padding: .35rem .75rem;
+    border-radius: 5px;
+    font-size: .96rem;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+
+  .reference-option:hover,
+  .reference-option[aria-selected="true"] {
+    background: var(--selected-wash);
+    color: var(--leaf);
+  }
+
+  .reference-option[aria-selected="true"] {
+    outline: 1px solid var(--leaf);
+    outline-offset: -1px;
+  }
+
+  .reference-picker__empty {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: .9rem;
+  }
+
+  .reference-picker__empty:not(:empty) {
+    margin: .65rem 0 .25rem;
+  }
+
+  @media (min-width: 701px) and (min-height: 700px) {
+    .reference-filter {
+      position: sticky;
+      z-index: 4;
+      top: 5.25rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .reference-filter {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .reference-filter__heading {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: .2rem .65rem;
+    }
+
+    .reference-picker {
+      grid-column: 1;
+    }
   }
 
   .reference-results {
@@ -292,21 +552,6 @@ const topics = [...new Set(posts.flatMap((post) => post.data.tags.filter((tag) =
   }
 
   @media (max-width: 620px) {
-    .reference-filter {
-      position: relative;
-      top: auto;
-      grid-template-columns: 1fr;
-      gap: .55rem;
-    }
-
-    .reference-filter__clear {
-      position: absolute;
-      top: .45rem;
-      right: .8rem;
-      min-height: 1.75rem;
-      padding: .15rem 0;
-    }
-
     .reference-results__heading {
       display: grid;
     }
